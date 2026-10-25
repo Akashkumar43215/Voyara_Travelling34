@@ -211,9 +211,3 @@ module.exports = {
   loginUser,
   getCurrentUser,
 };
-
-module.exports = {
-  registerUser,
-  loginUser,
-  getCurrentUser,
-};

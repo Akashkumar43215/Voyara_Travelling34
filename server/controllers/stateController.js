@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const State = require('../models/State');
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 /**
  * Helper to normalize state slugs and names
  * Handles aliases such as "Jammu & Kashmir" -> "jammu-and-kashmir"
@@ -36,7 +38,7 @@ const getStates = async (req, res, next) => {
 
     // Search by Name or Description (Case-insensitive)
     if (search && search.trim() !== '') {
-      const searchRegex = new RegExp(search.trim(), 'i');
+      const searchRegex = new RegExp(escapeRegex(search.trim()), 'i');
       filter.$or = [
         { name: searchRegex },
         { description: searchRegex },
@@ -82,7 +84,7 @@ const getStateByIdOrSlug = async (req, res, next) => {
     if (!state) {
       const cleanedName = id.replace(/&/g, 'and').replace(/-/g, ' ');
       state = await State.findOne({
-        name: new RegExp(`^${cleanedName}$`, 'i')
+        name: new RegExp(`^${escapeRegex(cleanedName)}$`, 'i')
       });
     }
 

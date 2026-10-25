@@ -318,4 +318,9 @@ test("API integration", { skip }, async (t) => {
     assert.equal((await call("GET", "/api/nope")).status, 404);
     assert.equal((await call("POST", "/api/bookings", null, ann.token)).status, 400);
   });
+
+  await t.test("state search and lookup treat punctuation as plain text, not a regex", async () => {
+    assert.equal((await call("GET", "/api/states?search=(")).status, 200);
+    assert.equal((await call("GET", "/api/states/(")).status, 404);
+  });
 });
