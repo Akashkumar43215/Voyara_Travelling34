@@ -1,0 +1,245 @@
+/* ======================================================
+   MOTION
+   Page transitions, scroll reveal, the Home photo slideshow, the featured slider, hover and press
+   feedback. Everything here is skipped for visitors who ask their device for reduced motion
+   (see the block at the bottom, and the JavaScript checks in utils/motion.js).
+
+   Rule: animate opacity and transform only, keep it short, and never let motion hide content for long.
+   ====================================================== */
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes rise-sm { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes kenburns { from { transform: scale(1.02); } to { transform: scale(1.14); } }
+@keyframes drift {
+  0% { background-position: 85% 0%, 0 0; }
+  50% { background-position: 60% 40%, 0 0; }
+  100% { background-position: 85% 0%, 0 0; }
+}
+@keyframes glow {
+  0%, 100% { box-shadow: 0 8px 24px rgba(6, 90, 243, 0.45); }
+  50% { box-shadow: 0 8px 34px rgba(6, 90, 243, 0.75), 0 0 0 6px rgba(83, 178, 254, 0.18); }
+}
+@keyframes modal-in { from { opacity: 0; transform: translateY(24px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes menu-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+@keyframes icon-swap { from { opacity: 0; transform: rotate(-90deg) scale(0.5); } to { opacity: 1; transform: none; } }
+@keyframes price-pop { 0% { transform: scale(1.16); color: #f26a1b; } 100% { transform: none; } }
+@keyframes caption-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+
+/* ---------- Page transition: a soft fade when you move between pages (opacity only, so fixed bars stay put) ---------- */
+.page-transition { animation: fade-in 0.4s var(--ease-out) backwards; }
+
+/* ---------- Scroll progress line ---------- */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1000; pointer-events: none; }
+.scroll-progress span {
+  display: block; height: 100%; transform-origin: 0 50%; transform: scaleX(0);
+  background: linear-gradient(90deg, #53b2fe, #ffd24d, #f26a1b);
+  will-change: transform;
+}
+
+/* ---------- Scroll reveal (classes are added by hooks/useScrollReveal.js and removed when done) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(0.985);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+.reveal.reveal-in { opacity: 1; transform: none; }
+
+/* ---------- Banners and hero: the text rises in, one line after the other ---------- */
+.page-hero-badge, .page-hero-title, .page-hero-sub, .page-hero-actions, .page-hero-card,
+.hero-content > * { animation: rise 0.8s var(--ease-out) backwards; }
+
+.page-hero-badge { animation-delay: 0.05s; }
+.page-hero-title { animation-delay: 0.15s; }
+.page-hero-sub { animation-delay: 0.25s; }
+.page-hero-actions { animation-delay: 0.3s; }
+.page-hero-card { animation-delay: 0.35s; }
+.hero-content > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-content > *:nth-child(2) { animation-delay: 0.15s; }
+.hero-content > *:nth-child(3) { animation-delay: 0.25s; }
+.hero-content > *:nth-child(4) { animation-delay: 0.35s; }
+.hero-content > *:nth-child(5) { animation-delay: 0.45s; }
+.hero-content > *:nth-child(6) { animation-delay: 0.55s; }
+
+/* the soft glow in every banner drifts slowly */
+.page-hero {
+  overflow: hidden;
+  background-size: 140% 140%, 100% 100%;
+  animation: drift 16s ease-in-out infinite;
+}
+
+/* Home search button breathes */
+.hero-photo .search-btn { animation: glow 3s ease-in-out infinite; }
+
+/* ---------- Home hero: photo slideshow ---------- */
+.hero-photo.has-slides {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #0a1f3f;
+  padding-bottom: 7.25rem;
+}
+.hero-slides { position: absolute; inset: 0; z-index: 0; }
+.hero-slides::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(6, 16, 30, 0.72) 0%, rgba(8, 30, 62, 0.5) 45%, rgba(10, 40, 90, 0.78) 100%);
+}
+.hero-slide {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center 40%; background-repeat: no-repeat;
+  opacity: 0; transform: scale(1.14);
+  transition: opacity 1.4s ease;
+  will-change: opacity, transform;
+}
+.hero-slide.is-active { opacity: 1; animation: kenburns 9s ease-out forwards; }
+.hero-photo.has-slides > .container { position: relative; z-index: 2; }
+
+.hero-slider-bar {
+  position: absolute; left: 0; right: 0; bottom: 0.9rem; z-index: 3;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0 max(1rem, calc((100% - 1192px) / 2));
+}
+.hero-slider-caption {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 36px; padding: 0.3rem 0.95rem;
+  border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(8, 18, 38, 0.5); backdrop-filter: blur(8px);
+  color: #fff; font: inherit; font-size: 0.86rem; font-weight: 800; cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.hero-slider-caption.is-static { cursor: default; }
+.hero-slider-caption:not(.is-static):hover { background: rgba(8, 18, 38, 0.78); transform: translateY(-2px); }
+.hero-slider-caption span { animation: caption-in 0.6s var(--ease-out) backwards; }
+.hero-slider-caption em { display: inline-flex; align-items: center; gap: 0.2rem; font-style: normal; color: #ffd24d; }
+.hero-slider-caption svg { color: #ffd24d; }
+
+.hero-dots { display: flex; align-items: center; }
+.hero-dots button, .featured-dots button {
+  position: relative; width: 32px; height: 32px; padding: 0; border: 0; background: transparent; cursor: pointer;
+}
+.hero-dots button::before, .featured-dots button::before {
+  content: ""; position: absolute; top: 50%; left: 50%; width: 9px; height: 9px; border-radius: 99px;
+  background: rgba(255, 255, 255, 0.5); transform: translate(-50%, -50%);
+  transition: width 0.4s var(--ease-out), background 0.3s;
+}
+.hero-dots button:hover::before, .featured-dots button:hover::before { background: rgba(255, 255, 255, 0.85); }
+.hero-dots button.is-active::before, .featured-dots button.is-active::before { width: 26px; background: #ffd24d; }
+.hero-dots button:focus-visible, .featured-dots button:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 8px; }
+
+/* ---------- Featured journeys slider ---------- */
+.featured-section { padding-top: 1rem; }
+.featured-slider {
+  position: relative; overflow: hidden; border-radius: 18px; background: #0f1b2d;
+  box-shadow: var(--card-shadow, 0 4px 18px rgba(0, 0, 0, 0.18));
+  touch-action: pan-y; user-select: none;
+}
+.featured-slider:focus-visible { outline: 3px solid rgba(0, 140, 255, 0.5); outline-offset: 3px; }
+.featured-track { display: flex; transition: transform 0.9s var(--ease-in-out); will-change: transform; }
+.featured-slide {
+  position: relative; flex: 0 0 100%; min-width: 0; aspect-ratio: 21 / 8; overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.featured-slide img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.1); transition: transform 8s ease-out;
+}
+.featured-slide.is-active img { transform: scale(1); }
+.featured-shade {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(6, 16, 30, 0.86) 0%, rgba(6, 16, 30, 0.45) 45%, transparent 78%),
+    linear-gradient(0deg, rgba(6, 16, 30, 0.5), transparent 45%);
+}
+.featured-copy {
+  position: relative; z-index: 1; max-width: 580px; padding: 2.5rem 3rem 3.4rem; color: #fff;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.7rem;
+}
+.featured-copy > * { opacity: 0; transform: translateY(18px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+.featured-slide.is-active .featured-copy > * { opacity: 1; transform: none; }
+.featured-slide.is-active .featured-copy > *:nth-child(1) { transition-delay: 0.35s; }
+.featured-slide.is-active .featured-copy > *:nth-child(2) { transition-delay: 0.5s; }
+.featured-slide.is-active .featured-copy > *:nth-child(3) { transition-delay: 0.65s; }
+.featured-slide.is-active .featured-copy > *:nth-child(4) { transition-delay: 0.8s; }
+.featured-tag {
+  display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.8rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.03em;
+}
+.featured-tag svg { color: #ffd24d; }
+.featured-copy h3 { margin: 0; color: #fff; font-size: clamp(1.8rem, 3.6vw, 2.9rem); font-weight: 900; line-height: 1.08; text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4); }
+.featured-copy p { margin: 0; color: rgba(255, 255, 255, 0.88); font-weight: 700; line-height: 1.5; }
+.featured-dots { position: absolute; right: 1.25rem; bottom: 0.8rem; z-index: 2; display: flex; }
+
+/* a counting number keeps the style of the number around it */
+.count-up { font: inherit; color: inherit; letter-spacing: inherit; }
+
+/* ---------- Hover and press feedback ---------- */
+.btn { transition: transform 0.2s var(--ease-out), box-shadow 0.25s, background-color 0.25s, filter 0.25s, color 0.25s; }
+.btn:active:not(.search-btn) { transform: scale(0.97); }
+.btn-primary { position: relative; overflow: hidden; }
+.btn-primary::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.38) 50%, transparent 70%);
+  transform: translateX(-130%); transition: transform 0.8s var(--ease-out);
+}
+.btn-primary:hover::after { transform: translateX(130%); }
+
+.nav-link svg { transition: transform 0.25s var(--ease-out); }
+.nav-link:hover svg { transform: translateY(-2px) scale(1.12); }
+
+.theme-icon { display: inline-flex; animation: icon-swap 0.45s var(--ease-out) backwards; }
+.price-pop { display: inline-block; animation: price-pop 0.55s var(--ease-out); }
+
+/* place photos drift slowly, like the Home slideshow */
+.place-details-hero-image { animation: kenburns 16s ease-out forwards; }
+
+/* the first loading screen waits a moment so fast pages never flash it */
+.page-loader { animation: fade-in 0.3s 0.2s backwards; }
+
+/* ---------- Modals and the phone menu ---------- */
+.hotel-modal-backdrop { animation: fade-in 0.25s ease backwards; }
+.hotel-modal, .cancel-modal { animation: modal-in 0.4s var(--ease-out) backwards; }
+.mobile-backdrop { animation: fade-in 0.25s ease backwards; }
+
+@media (max-width: 900px) {
+  .nav-menu.mobile-open { animation: menu-in 0.3s var(--ease-out) backwards; }
+  .nav-menu.mobile-open > li { animation: rise-sm 0.4s var(--ease-out) backwards; }
+  .nav-menu.mobile-open > li:nth-child(1) { animation-delay: 0.04s; }
+  .nav-menu.mobile-open > li:nth-child(2) { animation-delay: 0.08s; }
+  .nav-menu.mobile-open > li:nth-child(3) { animation-delay: 0.12s; }
+  .nav-menu.mobile-open > li:nth-child(4) { animation-delay: 0.16s; }
+  .nav-menu.mobile-open > li:nth-child(5) { animation-delay: 0.2s; }
+  .nav-menu.mobile-open > li:nth-child(6) { animation-delay: 0.24s; }
+  .nav-menu.mobile-open > li:nth-child(7) { animation-delay: 0.28s; }
+  .nav-menu.mobile-open > li:nth-child(8) { animation-delay: 0.32s; }
+  .nav-menu.mobile-open > li:nth-child(9) { animation-delay: 0.36s; }
+  .nav-menu.mobile-open > li:nth-child(10) { animation-delay: 0.4s; }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 700px) {
+  .featured-slide { aspect-ratio: auto; min-height: 400px; }
+  .featured-copy { padding: 1.5rem 1.25rem 3.4rem; }
+  .featured-shade { background: linear-gradient(0deg, rgba(6, 16, 30, 0.9) 0%, rgba(6, 16, 30, 0.45) 55%, transparent 88%); }
+  .featured-dots { left: 0; right: 0; justify-content: center; bottom: 0.5rem; }
+
+  .hero-photo.has-slides { padding-bottom: 6.5rem; }
+  .hero-slider-bar { justify-content: center; }
+  .hero-slider-caption { display: none; }
+}
+
+/* ---------- Reduced motion: everything is still, nothing is hidden ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .page-transition, .page-hero, .page-hero-badge, .page-hero-title, .page-hero-sub, .page-hero-actions,
+  .page-hero-card, .hero-content > *, .hero-photo .search-btn { animation: none; }
+  .hero-slide, .hero-slide.is-active { animation: none; transform: none; transition: none; }
+  .featured-track, .featured-slide img, .featured-copy > * { transition: none; transform: none; }
+  .featured-copy > * { opacity: 1; }
+  .place-details-hero-image { animation: none; }
+  .btn-primary::after { display: none; }
+}

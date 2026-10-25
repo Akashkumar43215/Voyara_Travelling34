@@ -1,0 +1,49 @@
+/* ======================================================
+   Hotels near your places: dates/guests bar, distance chips,
+   facilities (listed vs typical), restaurants nearby.
+   ====================================================== */
+
+.hotels-bar-field label { display: flex; align-items: center; gap: 0.3rem; }
+.hotels-bar-dates { display: flex; align-items: center; gap: 0.4rem; color: rgba(255, 255, 255, 0.8); }
+.hotels-bar-dates input,
+.hotels-bar-guests select {
+  padding: 0.15rem 0.2rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 900;
+  color-scheme: dark;
+  cursor: pointer;
+}
+.hotels-bar-guests { display: flex; gap: 0.25rem; }
+.hotels-bar-guests select option { color: #1a1a1a; background: #fff; }
+
+.hotel-near { display: flex; flex-wrap: wrap; gap: 0.35rem 0.7rem; }
+.hotel-near span { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.15rem 0.55rem; border-radius: 999px; background: #eaf5ff; color: #0b5fd6; font-size: 0.76rem; font-weight: 700; }
+.hotel-near svg { flex-shrink: 0; }
+.hotel-near .more { background: none; color: #008cff; }
+
+.hotel-closest-tag { position: absolute; bottom: 10px; left: 10px; z-index: 2; padding: 0.25rem 0.65rem; border-radius: 4px; background: #f26a1b; color: #fff; font-size: 0.7rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.hotel-amenity-grid li.verified em { margin-left: 0.3rem; padding: 0.05rem 0.4rem; border-radius: 999px; background: #eefaf1; color: #2b9348; font-style: normal; font-size: 0.68rem; font-weight: 900; }
+.hotel-fine-print { margin: -0.6rem 0 1.1rem; font-size: 0.76rem; color: #9b9b9b; line-height: 1.4; }
+.hotel-contact { padding: 0.8rem 0.9rem; margin-bottom: 0.9rem; border-radius: 8px; background: #f5f9ff; border: 1px solid #dbeafe; }
+.hotel-contact svg { color: #008cff !important; }
+
+.hotel-restaurants { margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid #eee; }
+.hotel-restaurants h3 { margin: 0 0 0.7rem; font-size: 1rem; font-weight: 900; }
+.hotel-restaurant-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 1rem; }
+.hotel-restaurant-list li { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.6rem 0.8rem; border-radius: 8px; background: #fafafa; border: 1px solid #eee; }
+.hotel-restaurant-list strong { display: block; font-size: 0.9rem; font-weight: 900; color: #1a1a1a; }
+.hotel-restaurant-list small { font-size: 0.76rem; color: #4a4a4a; }
+.hotel-restaurant-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; flex-shrink: 0; }
+.hotel-restaurant-meta em { font-style: normal; font-size: 0.74rem; color: #9b9b9b; }
+.hotel-restaurant-meta .tag { padding: 0.05rem 0.45rem; border-radius: 999px; background: #eee; color: #4a4a4a; font-size: 0.66rem; font-weight: 900; }
+.hotel-restaurant-meta .tag.veg { background: #eefaf1; color: #2b9348; }
+
+@media (max-width: 760px) {
+  .hotel-restaurant-list { grid-template-columns: 1fr; }
+}

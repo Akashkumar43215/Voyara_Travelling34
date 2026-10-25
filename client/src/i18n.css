@@ -1,0 +1,105 @@
+/* =========================================================
+   LANGUAGE SWITCH (English / Hindi)
+   Plain hex colours so `npm run dark` can build dark mode.
+   ========================================================= */
+
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 12px;
+  border: 1px solid #e7e7e7; border-radius: 999px;
+  color: #065af3; background: #ffffff;
+  font: inherit; font-size: 0.85rem; font-weight: 900; cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.lang-toggle:hover { background: #e3f0ff; transform: translateY(-1px); }
+
+/* over the home photo the navbar is transparent */
+.on-hero .lang-toggle { color: #ffffff; border-color: rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.14); }
+.on-hero .lang-toggle:hover { background: rgba(255, 255, 255, 0.26); }
+
+/* Lato has no Devanagari letters, so Hindi text gets a font that does */
+:lang(hi) body,
+:lang(hi) button,
+:lang(hi) input,
+:lang(hi) select,
+:lang(hi) textarea {
+  font-family: "Noto Sans Devanagari", "Nirmala UI", "Mangal", var(--font-sans, system-ui), sans-serif;
+}
+
+/* Odia has its own script, so it gets its own font too */
+:lang(or) body,
+:lang(or) button,
+:lang(or) input,
+:lang(or) select,
+:lang(or) textarea {
+  font-family: "Noto Sans Oriya", "Kalinga", "Nirmala UI", var(--font-sans, system-ui), sans-serif;
+}
+
+/* Devanagari has tall marks: give headings and buttons a little more line height */
+:lang(hi) h1, :lang(hi) h2, :lang(hi) h3 { line-height: 1.35; letter-spacing: 0; }
+:lang(hi) .btn, :lang(hi) .nav-link { line-height: 1.4; }
+:lang(or) h1, :lang(or) h2, :lang(or) h3 { line-height: 1.45; letter-spacing: 0; }
+:lang(or) .btn, :lang(or) .nav-link { line-height: 1.5; }
+
+@media (max-width: 480px) {
+  .lang-toggle { height: 38px; padding: 0 10px; }
+}
+
+/* ---------- language menu ---------- */
+.lang-menu { position: relative; }
+.lang-list {
+  position: absolute; top: calc(100% + 8px); right: 0; z-index: 120;
+  display: grid; gap: 2px; min-width: 150px; margin: 0; padding: 6px; list-style: none;
+  border: 1px solid #e7ecf3; border-radius: 14px; background: #ffffff;
+  box-shadow: 0 18px 40px -14px rgba(10, 42, 94, 0.45);
+}
+.lang-list button {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;
+  padding: 9px 12px; border: 0; border-radius: 10px; color: #1a1a1a; background: transparent;
+  font: inherit; font-size: 0.9rem; font-weight: 700; text-align: left; cursor: pointer;
+}
+.lang-list button:hover { background: #f0f6ff; }
+.lang-list button[aria-checked="true"] { color: #065af3; background: #e3f0ff; }
+
+/* ---------- navbar keeps one size in every language ---------- */
+/* Hindi and Odia labels are longer and taller than English ones. Every part of the bar gets a fixed
+   size, so switching language never moves or resizes anything (and nothing runs off the screen). */
+.navbar-wrapper > .container { max-width: 1480px; padding-left: 1rem; padding-right: 1rem; }
+.navbar { height: 72px; gap: 0.75rem; }
+.nav-link, .nav-actions .btn, .lang-toggle, .nav-brand-sub, .nav-user { line-height: 1.2; }
+.nav-brand { width: 190px; flex: 0 0 190px; }
+.nav-brand > div:last-child { min-width: 0; }
+.nav-brand-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-menu { flex: 0 0 auto; }
+.nav-actions { flex: 0 0 auto; gap: 0.6rem; }
+
+@media (min-width: 901px) {
+  .nav-menu .nav-link {
+    width: 84px; min-width: 84px; height: 56px; box-sizing: border-box;
+    justify-content: flex-start; padding: 8px 0.25rem 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+
+.nav-actions .btn { height: 40px; box-sizing: border-box; padding-left: 0.6rem; padding-right: 0.6rem; width: 104px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nav-actions .btn-admin { width: 96px; }
+.nav-actions .nav-user { width: 128px; height: 40px; box-sizing: border-box; flex: 0 0 128px; }
+.lang-toggle { width: 84px; flex: 0 0 84px; justify-content: center; box-sizing: border-box; padding: 0 8px; }
+.lang-toggle span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+@media (min-width: 901px) and (max-width: 1400px) {
+  .nav-brand { width: 150px; flex-basis: 150px; }
+  .nav-menu { gap: 0.2rem; }
+  .nav-menu .nav-link { width: 72px; min-width: 72px; font-size: 0.74rem; }
+  .nav-actions { gap: 0.4rem; }
+  .nav-actions .btn { width: 88px; font-size: 0.8rem; }
+  .nav-actions .btn-admin { width: 84px; }
+  .nav-actions .nav-user { width: 108px; flex-basis: 108px; }
+  .lang-toggle { width: 72px; flex-basis: 72px; }
+}
+
+/* ---------- Home hero keeps one height in every language ---------- */
+.hero-photo .hero-title { line-height: 1.2; min-height: 2.4em; }
+:lang(hi) .hero-photo .hero-title,
+:lang(or) .hero-photo .hero-title { font-size: clamp(1.7rem, 3.3vw, 2.6rem); line-height: 1.2; }
+.hero-photo .hero-subtitle { min-height: 3.4em; }

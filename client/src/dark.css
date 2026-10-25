@@ -1,0 +1,112 @@
+/* ======================================================
+   DARK MODE
+   Switched on by <html data-theme="dark"> (see ThemeContext and the navbar toggle).
+   Loaded after the page styles. Light mode is the default and is not touched here.
+   Rule: surfaces get a deep navy, text turns light, the brand blue and the blue banner stay.
+   ====================================================== */
+
+/* ---------- The toggle button (both themes) ---------- */
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; flex: 0 0 auto; border-radius: 50%;
+  border: 1px solid var(--border, #e7e7e7); background: #fff; color: #0b5fd6;
+  cursor: pointer; transition: background 0.2s, transform 0.2s, border-color 0.2s;
+}
+.theme-toggle:hover { background: #eaf5ff; transform: rotate(12deg); }
+.theme-toggle:focus-visible { outline: 3px solid rgba(0, 140, 255, 0.45); outline-offset: 2px; }
+.on-hero .theme-toggle { background: rgba(255, 255, 255, 0.16); border-color: rgba(255, 255, 255, 0.35); color: #fff; }
+.on-hero .theme-toggle:hover { background: rgba(255, 255, 255, 0.28); }
+
+/* ---------- Colour tokens ---------- */
+:root[data-theme="dark"] {
+  --page-bg: #0b1220;
+  --bg-main: #0b1220;
+  --bg-card: #141c2e;
+  --bg-subtle: #1a2438;
+  --bg-dark: #070d18;
+  --ink: #e8edf5;
+  --text-main: #e8edf5;
+  --text-muted: #aab5c8;
+  --text-light: #7f8da6;
+  --text-inverse: #0b1220;
+  --border: #263149;
+  --border-focus: #4aa8ff;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.55);
+  --shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.6);
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 8px 24px -14px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.65);
+  --primary: #2d9bff;
+  --primary-dark: #7cc0ff;
+  --primary-light: #12304f;
+  --accent-light: #12304f;
+  --secondary-light: #3a2a0c;
+  --hero-from: #071a3d;
+  --hero-to: #0a3a94;
+}
+
+:root[data-theme="dark"] body,
+:root[data-theme="dark"] .main-content { background: var(--page-bg); color: var(--text-main); }
+
+:root[data-theme="dark"] .theme-toggle { background: #1a2438; border-color: #2c3a57; color: #ffd24d; }
+:root[data-theme="dark"] .theme-toggle:hover { background: #22304c; }
+:root[data-theme="dark"] .on-hero .theme-toggle { background: rgba(255, 255, 255, 0.16); border-color: rgba(255, 255, 255, 0.35); color: #ffd24d; }
+
+/* the browser's own controls (scrollbars, date pickers, selects) follow the theme via color-scheme */
+
+/* ======================================================
+   Hand-tuned fixes (the generated file handles plain colours; these are the special cases)
+   ====================================================== */
+
+/* Solid "ink" chips: in light mode they are near-black, which would turn light when the ink token flips */
+:root[data-theme="dark"] .card .btn-secondary,
+:root[data-theme="dark"] .region-pill.active,
+:root[data-theme="dark"] .btn-outline:hover,
+:root[data-theme="dark"] .place-hotels-button,
+:root[data-theme="dark"] .review-place-number,
+:root[data-theme="dark"] .booking-view-btn {
+  background: #2b3a58 !important;
+  border-color: #2b3a58;
+  color: #fff;
+}
+:root[data-theme="dark"] .booking-view-btn:hover,
+:root[data-theme="dark"] .card .btn-secondary:hover { background: #36496d !important; }
+:root[data-theme="dark"] .btn-outline { border-color: #4a5d82; color: #e8edf5; }
+
+/* Places page: same page colour as the rest of the site, no blue-tinted text */
+:root[data-theme="dark"] .places-page,
+:root[data-theme="dark"] .places-container { background: var(--page-bg); }
+:root[data-theme="dark"] .places-search input,
+:root[data-theme="dark"] .places-controls select { color: var(--text-main); }
+:root[data-theme="dark"] .places-search input::placeholder { color: var(--text-light); }
+:root[data-theme="dark"] .places-heading p,
+:root[data-theme="dark"] .places-count { color: var(--text-muted); }
+
+/* Form fields */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea { color: var(--text-main); }
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder { color: var(--text-light); }
+:root[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); }
+:root[data-theme="dark"] option { background: #141c2e; color: #e8edf5; }
+
+/* Photos: slightly softer so they do not glare against a dark page */
+:root[data-theme="dark"] img { filter: brightness(0.92) contrast(1.03); }
+:root[data-theme="dark"] .nav-brand-logo img,
+:root[data-theme="dark"] .hero-photo img { filter: none; }
+
+/* Home hero: darker overlay so the white text stays crisp */
+:root[data-theme="dark"] .hero-photo { filter: none; }
+
+/* Scrollbars */
+:root[data-theme="dark"] { scrollbar-color: #36496d #0b1220; }
+
+/* Admin: the dashboard body sits on the page colour, no separate tinted panel */
+:root[data-theme="dark"] .voyara-admin-page.voyara-admin-body { background: transparent; }
+
+/* About page: the big step numbers stay faint, they are decoration */
+:root[data-theme="dark"] .about-step-number { color: #1f3b5c; }

@@ -1,0 +1,138 @@
+/* ======================================================
+   ONE LOOK FOR EVERY PAGE
+   Same page background, same blue banner, same cards and buttons on every screen,
+   so going from Home to Stays to Trips never feels like a different website.
+   Loaded after the page-specific styles.
+   ====================================================== */
+
+:root {
+  --page-bg: #f2f2f2;
+  --hero-from: #0a2a5e;
+  --hero-to: #0f55c8;
+  --card-radius: 14px;
+  --card-shadow: 0 1px 4px rgba(0, 0, 0, 0.12), 0 8px 24px -14px rgba(10, 42, 94, 0.25);
+}
+
+body, .main-content { background: var(--page-bg); }
+
+/* every page body sits on the same grey */
+.my-trips-page, .real-places-page, .dates-page, .availability-page, .trip-builder-page,
+.booking-details-page, .trip-review-page, .payment-page, .trip-confirmation-page,
+.favorites-page, .stays-page, .places-page, .state-region-page, .addon-page {
+  background: var(--page-bg);
+}
+
+/* ---------- Shared banner ---------- */
+.page-hero {
+  position: relative;
+  color: #fff;
+  padding: 3rem 0 3.25rem;
+  background:
+    radial-gradient(700px 300px at 85% 0%, rgba(255, 210, 77, 0.16), transparent 60%),
+    linear-gradient(135deg, var(--hero-from), var(--hero-to));
+}
+.page-hero.compact { padding: 1.75rem 0 2rem; }
+.page-hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+.page-hero.center .page-hero-row { justify-content: center; text-align: center; }
+.page-hero.center .page-hero-text { display: flex; flex-direction: column; align-items: center; }
+.page-hero-text { min-width: 0; max-width: 760px; }
+
+.page-hero-badge {
+  display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 0.9rem;
+  padding: 0.4rem 0.9rem; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.82rem; font-weight: 800; color: #fff;
+}
+.page-hero-badge svg { width: 15px; height: 15px; color: #ffd24d; }
+
+.page-hero-title {
+  margin: 0 0 0.6rem; color: #fff; font-family: inherit;
+  font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 900; line-height: 1.12; letter-spacing: -0.015em;
+}
+.page-hero-title span, .page-hero-title em { color: #ffd24d; font-style: normal; -webkit-text-fill-color: #ffd24d; background: none; }
+.page-hero-sub { margin: 0; color: rgba(255, 255, 255, 0.82); font-size: 1.02rem; line-height: 1.6; max-width: 640px; }
+.page-hero.center .page-hero-sub { margin-left: auto; margin-right: auto; }
+.page-hero-sub svg { vertical-align: -3px; margin-right: 4px; }
+
+.page-hero-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.page-hero-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0.65rem 1.2rem;
+  border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.12);
+  color: #fff; font: inherit; font-weight: 800; font-size: 0.92rem; text-decoration: none; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.page-hero-btn:hover { background: rgba(255, 255, 255, 0.24); }
+
+/* a white card that overlaps the banner, like the Destinations search box */
+.page-hero-card {
+  margin-top: 1.75rem; padding: 1rem; background: #fff; color: #1a1a1a; border-radius: 20px;
+  box-shadow: 0 30px 60px -28px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Pages that had their own header: hide it, the banner replaces it ---------- */
+
+/* pages whose content follows a banner start a little lower than the banner edge */
+.page-hero + .container, .page-hero + .section, .page-hero + .stays-body { padding-top: 1.75rem; }
+
+/* ---------- Same cards everywhere ---------- */
+.card, .favorite-card, .hotel-card, .booking-card, .real-place-card, .addon-card,
+.booking-summary-card, .trip-review-card, .payment-card, .dates-room-card {
+  border-radius: var(--card-radius);
+}
+
+/* ---------- Same primary button everywhere ---------- */
+.btn-primary, .search-btn, .trips-back-btn {
+  font-weight: 900;
+}
+
+/* ---------- Auth pages join the same family ---------- */
+.auth-page { background: var(--page-bg); }
+
+@media (max-width: 768px) {
+  .page-hero { padding: 2rem 0 2.25rem; }
+  .page-hero.compact { padding: 1.25rem 0 1.5rem; }
+  .page-hero-row { align-items: flex-start; }
+  .page-hero-actions { width: 100%; }
+  .page-hero-actions > * { flex: 1 1 auto; justify-content: center; }
+  .page-hero-sub { font-size: 0.95rem; }
+  .page-hero-card { padding: 0.75rem; border-radius: 16px; }
+}
+
+/* ---------- Pages that now start with the banner: no gap above it ---------- */
+.my-trips-page, .booking-details-page, .trip-review-page, .payment-page,
+.favorites-page, .stays-page { padding-top: 0; }
+.my-trips-page, .booking-details-page, .trip-review-page, .payment-page, .favorites-page {
+  padding-bottom: 5rem;
+}
+.page-hero + .container, .page-hero + .section { padding-top: 1.75rem; }
+.page-body { padding-top: 1.75rem; }
+.favorites-body { padding-top: 1.75rem; }
+.stays-page { min-height: 60vh; }
+.places-page .places-container { padding-top: 2rem; }
+
+/* ---------- Login and register: the same blue band on top, the card overlaps it ---------- */
+.auth-page {
+  background:
+    radial-gradient(700px 260px at 85% 0%, rgba(255, 210, 77, 0.16), transparent 60%),
+    linear-gradient(135deg, var(--hero-from), var(--hero-to)) top / 100% 300px no-repeat,
+    var(--page-bg);
+}
+
+/* ---------- Banner text must stay white even where a page styles its own h1 ---------- */
+.page-hero .page-hero-title { color: #fff !important; font-family: inherit !important; }
+.page-hero .page-hero-title span { color: #ffd24d !important; }
+.page-hero .page-hero-sub { color: rgba(255, 255, 255, 0.82) !important; }
+
+/* Dates page: the trip summary bar is dark, so its text is light */
+.dates-summary-card h3 { color: #fff; }
+.dates-summary-card > div > span { color: rgba(255, 255, 255, 0.7); }
+
+/* ---------- Admin dashboard sits on the same grey page as everything else ---------- */
+.voyara-admin-page.voyara-admin-body {
+  background: var(--page-bg); min-height: 0;
+  width: min(1192px, calc(100% - 2rem)); margin: 0 auto; padding: 28px 0 70px;
+}
+.main-content:has(.voyara-admin-body) { background: var(--page-bg); }
+
+/* Destinations banner badge icon matches the other banners */
+.state-region-page .hero-badge svg { color: #ffd24d; stroke: #ffd24d; }

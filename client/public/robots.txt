@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin
+Disallow: /payment
+Disallow: /trip-review
+Disallow: /booking-details
+Disallow: /trip-confirmation
+Disallow: /trips
+Disallow: /api/

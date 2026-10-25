@@ -1,0 +1,249 @@
+/* ======================================================
+   RESPONSIVE POLISH
+   Loaded last. Makes every page comfortable from a 320px phone to a wide desktop:
+   - nothing is wider than the screen
+   - buttons and links are big enough to tap
+   - text fields don't make phones zoom in
+   - fixed bars respect the phone's rounded corners and home bar
+   - hover effects don't "stick" on touch screens
+   ====================================================== */
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+img, video, svg, iframe { max-width: 100%; }
+
+/* Grid and flex children may shrink below their content width. Without this, one long
+   word or a wide image can push a whole column wider than the screen. */
+.real-places-grid > *,
+.places-grid > *,
+.card-grid > *,
+.favorites-grid > *,
+.features-grid > *,
+.hotel-list > *,
+.hotel-card > *,
+.addon-layout > *,
+.addon-main > *,
+.hotels-layout > *,
+.booking-details-layout > *,
+.trip-review-grid > *,
+.payment-layout > *,
+.confirmation-grid > *,
+.mode-grid > *,
+.meal-plans > *,
+.resto-grid > *,
+.hotel-restaurant-list > *,
+.review-extras > *,
+.search-grid > * { min-width: 0; }
+
+/* Long names, addresses and e-mail addresses wrap instead of overflowing */
+.card-title,
+.hotel-card h3,
+.hotel-locality,
+.real-place-content h3,
+.real-place-address,
+.place-content h3,
+.favorite-card-body h3,
+.review-traveler-grid strong,
+.confirmation-traveler-grid strong,
+.trip-extra span,
+.booking-summary-section strong,
+.payment-summary-row strong { overflow-wrap: anywhere; }
+
+/* ---------------------------------------------------------------
+   TABLETS AND PHONES (up to 900px): comfortable touch targets
+   --------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .nav-toggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; }
+  .nav-toggle:hover { background: rgba(0, 0, 0, 0.05); }
+  .on-hero .nav-toggle:hover { background: rgba(255, 255, 255, 0.16); }
+
+  .footer-links a { display: inline-block; padding: 0.5rem 0; }
+  .footer-links li { margin: 0; }
+
+  .real-places-back,
+  .booking-back-btn,
+  .hotels-bar-back,
+  .place-back-button { min-height: 44px; }
+
+  .real-places-back { margin-bottom: 0.5rem; }
+
+  .password-toggle { width: 40px; height: 40px; padding: 0; margin-right: -8px; }
+
+  .star:not(:disabled) { padding: 6px; }
+  .star:not(:disabled) svg { width: 26px; height: 26px; }
+
+  .hotel-filters-close { width: 44px; height: 44px; align-items: center; justify-content: center; }
+  .hotel-clear { padding: 0.6rem 0.25rem; }
+
+  .favorite-remove { min-height: 40px; padding: 0.5rem 0; }
+  .favorite-card-body h3 a { display: inline-block; padding: 0.3rem 0; }
+
+  .review-delete { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+
+  .activity-btn,
+  .trip-extra button,
+  .booking-cancel-btn,
+  .booking-view-btn { min-height: 40px; }
+
+  .stepper button { width: 40px; height: 40px; }
+
+  .hotel-check { padding: 0.5rem 0; }
+  .hotel-sort button,
+  .hotels-sort button { min-height: 44px; }
+
+  /* quick-pick chips are tappable but still compact */
+  .hero-photo .search-card button[type="button"],
+  .dest-search-quick button,
+  .region-pill { min-height: 38px; }
+}
+
+/* ---------------------------------------------------------------
+   PHONES (up to 768px)
+   --------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* 16px text stops iPhones from zooming into a field when it is tapped */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea { font-size: 16px; }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+  select { min-height: 44px; }
+
+  .hotels-bar-dates input,
+  .hotels-bar-guests select { min-height: 40px; }
+
+  .container { padding: 0 1rem; }
+  .section { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+
+  .section-title { font-size: 1.6rem; }
+  .section-header { gap: 0.75rem; }
+
+  /* wide tables of numbers scroll inside their own box rather than the page */
+  table { display: block; overflow-x: auto; }
+
+  .hotel-card-actions { min-width: 0; }
+  .hotels-bar-inner { gap: 0.6rem; }
+}
+
+/* ---------------------------------------------------------------
+   SMALL PHONES (up to 480px)
+   --------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .container { padding: 0 0.9rem; }
+
+  .real-places-grid,
+  .places-grid,
+  .favorites-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .hotels-bar-dates { flex-wrap: wrap; }
+  .hotels-bar-dates input { flex: 1 1 130px; min-width: 0; }
+  .hotels-bar-dates > span { display: none; }
+  .hotels-bar-guests { flex-wrap: wrap; }
+  .hotels-bar-guests select { flex: 1 1 90px; min-width: 0; }
+
+  .hotel-card-actions { width: 100%; flex-direction: row; }
+  .hotel-card-actions > * { flex: 1; }
+
+  .meal-plan { padding-left: 2.4rem; }
+  .segmented { width: 100%; }
+
+  .hero-stats strong { font-size: 1.6rem; }
+
+  .confirmation-success { padding: 1.75rem 1rem; border-radius: 20px; }
+  .confirmation-reference { font-size: 0.82rem; padding: 0.5rem 0.9rem; }
+  .confirmation-reference strong { display: block; margin: 0.15rem 0 0; }
+
+  .cancel-actions { flex-direction: column-reverse; }
+  .cancel-keep, .cancel-confirm { width: 100%; min-height: 44px; }
+
+  .scroll-top-btn { right: 0.85rem; }
+}
+
+/* ---------------------------------------------------------------
+   PHONES WITH ROUNDED CORNERS / A HOME BAR: keep controls clear of them
+   --------------------------------------------------------------- */
+.stays-selection-bar,
+.availability-selection-bar,
+.real-places-selection-bar { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+
+.scroll-top-btn { bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); }
+.scroll-top-btn.lifted { bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
+
+/* ---------------------------------------------------------------
+   TOUCH SCREENS: no hover lift that gets stuck after a tap
+   --------------------------------------------------------------- */
+@media (hover: none) {
+  .card:hover,
+  .places-grid > *:hover,
+  .real-place-card:hover,
+  .favorite-card:hover,
+  .hotel-card:hover,
+  .mmt-dest-card:hover,
+  .feature-box:hover,
+  #why-voyara .feature-box:hover { transform: none; }
+
+  .card:hover .card-media img,
+  .places-grid > *:hover .place-image,
+  .real-place-card:hover .real-place-image > img,
+  .hotel-card:hover .hotel-card-image img,
+  .mmt-dest-card:hover img { transform: none; }
+}
+
+/* ---------------------------------------------------------------
+   LANDSCAPE PHONES (short screens): don't let tall hero blocks fill the view
+   --------------------------------------------------------------- */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-photo { padding-top: calc(73px + 1rem); padding-bottom: 3rem; }
+  .hotel-modal-hero { height: 150px; }
+  .scroll-top-btn { display: none; }
+}
+
+/* ---------------------------------------------------------------
+   VERY WIDE SCREENS: keep line lengths readable
+   --------------------------------------------------------------- */
+@media (min-width: 1600px) {
+  .container { max-width: 1360px; }
+}
+
+/* Respect people who ask their device for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---------------------------------------------------------------
+   TYPOGRAPHY: balanced headlines (no single word alone on a line)
+   --------------------------------------------------------------- */
+h1, h2, h3, .hero-title, .section-title { text-wrap: balance; }
+p, .section-desc, .card-desc { text-wrap: pretty; }
+
+/* ---------------------------------------------------------------
+   HOTEL PAGE ON LAPTOPS: fit all five sort options without scrolling
+   --------------------------------------------------------------- */
+@media (min-width: 961px) and (max-width: 1280px) {
+  .hotels-sort { gap: 0; }
+  .hotels-sort > span { padding: 0 0.5rem 0 0.25rem; }
+  .hotels-sort button { padding: 0.55rem 0.6rem; font-size: 0.82rem; }
+  .hotels-bar-field { min-width: 0; }
+}
+
+/* Login / register: the "Create an account" and "Login" links and the eye icon are easy to tap */
+@media (max-width: 900px) {
+  .auth-footer a { display: inline-block; padding: 0.65rem 0.4rem; }
+  .password-toggle { min-width: 40px; }
+}
+
+/* Small laptops and tablets just above the menu-button breakpoint. All seven menu items keep their icon
+   and their label (About and Contact look exactly like the others), so the bar tightens its spacing and
+   drops the user-name chip and the brand sub-line to make room. */
+@media (min-width: 901px) and (max-width: 1279px) {
+  .nav-extra { display: list-item; }
+  .nav-menu .nav-link svg { display: inline-block; }
+}
+@media (min-width: 901px) and (max-width: 1139px) {
+  .nav-menu { gap: 0; }
+  .nav-menu .nav-link { min-width: 0; padding: 0.4rem 0.4rem; font-size: 0.76rem; }
+  .nav-menu .nav-link svg { width: 18px; height: 18px; }
+  .nav-actions { gap: 0.35rem; }
+  .nav-actions .btn { padding: 0.45rem 0.7rem; font-size: 0.8rem; }
+  .nav-user { display: none; }
+  .nav-brand-sub { display: none; }
+}
