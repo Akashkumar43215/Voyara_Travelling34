@@ -46,6 +46,19 @@ A ready blueprint is in [render.yaml](../render.yaml).
 
 Railway and others: same two commands. Build `npm run install:all && npm run build`, start `npm start`.
 
+## 3b. Vercel for the website, Render for the API
+
+Use this when you want the website on Vercel. The API stays on Render (section 3). [client/vercel.json](../client/vercel.json) is already in the repo.
+
+1. Deploy the API on Render first and note its address, for example `https://voyara.onrender.com`.
+2. On Vercel: **Add New > Project**, pick the repo, set **Root Directory** to `client`. Vercel detects Vite.
+3. Add the environment variable `VITE_API_URL` = `https://voyara.onrender.com/api` (it is baked in at build time, so redeploy after changing it).
+4. Deploy. Note the Vercel address, for example `https://voyara.vercel.app`.
+5. Back on Render, set `CLIENT_URL` = the Vercel address (no trailing slash) and redeploy, so CORS and the security headers allow it. Add a custom domain here too if you use one.
+6. If you use Razorpay, the webhook URL stays on Render: `https://voyara.onrender.com/api/payments/razorpay/webhook`.
+
+Simplest option: skip Vercel and use Render alone (section 3). One address, no CORS setup.
+
 ## 4. First admin
 
 Register on the live site, then promote the account from your own computer (with `MONGO_URI` pointing at the live database):
