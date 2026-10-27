@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   ArrowLeft,
+  ArrowUp,
   ArrowRight,
   BedDouble,
   Check,
@@ -621,6 +622,10 @@ const Stays = () => {
           </label>
         ))}
       </div>
+
+      <button type="button" className="hotel-filters-top" onClick={(e) => e.currentTarget.closest(".hotel-filters").scrollTo({ top: 0, behavior: "smooth" })}>
+        Back to top <ArrowUp size={14} />
+      </button>
 
       <button type="button" className="btn btn-primary hotel-filters-apply" onClick={() => setFiltersOpen(false)}> {plural(tx, filteredStays.length, "Show {n} property", "Show {n} properties")} </button>
     </aside>

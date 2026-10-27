@@ -340,3 +340,7 @@
 @media (max-width: 900px) {
   .hotels-bar { position: static; }
 }
+
+/* sits at the bottom of the scrolling filter panel and returns it to the top */
+.hotel-filters-top { position: sticky; bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: calc(100% - 2rem); margin: 0.75rem 1rem 0; padding: 0.65rem; border: 0; border-radius: 8px; color: #fff; background: #1f2937; font: inherit; font-size: 0.8rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+.hotel-filters-top:hover { background: #008cff; }
