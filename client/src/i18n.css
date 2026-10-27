@@ -103,3 +103,18 @@
 :lang(hi) .hero-photo .hero-title,
 :lang(or) .hero-photo .hero-title { font-size: clamp(1.7rem, 3.3vw, 2.6rem); line-height: 1.2; }
 .hero-photo .hero-subtitle { min-height: 3.4em; }
+
+/* ---------- small phones: brand, language, theme and menu buttons must fit side by side ---------- */
+@media (max-width: 480px) {
+  .nav-brand { width: 124px; flex-basis: 124px; font-size: 1.15rem; }
+  .nav-brand-sub { display: none; }
+  .nav-actions { gap: 0.3rem; }
+  .lang-toggle { width: 72px; flex-basis: 72px; }
+}
+@media (max-width: 360px) {
+  .navbar { gap: 0.4rem; }
+  .nav-brand { width: 104px; flex-basis: 104px; }
+  .nav-brand-logo { width: 34px; height: 34px; }
+  .lang-toggle { width: 60px; flex-basis: 60px; }
+  .nav-actions { gap: 0.2rem; }
+}
