@@ -1412,6 +1412,27 @@
 :root[data-theme="dark"] .app-error p {
   color: #bcc6d8;
 }
+:root[data-theme="dark"] .hs-tabs {
+  border-bottom: 1px solid #2a3650;
+}
+:root[data-theme="dark"] .hs-tabs button {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hs-offer {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .hs-offer p {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hs-dest img {
+  background: #1a2438;
+}
+:root[data-theme="dark"] .hs-dest small {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hs-faq p {
+  color: #bcc6d8;
+}
 
 /* ---- hotels.css ---- */
 :root[data-theme="dark"] .hotels-page {

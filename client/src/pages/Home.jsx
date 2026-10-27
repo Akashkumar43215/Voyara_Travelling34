@@ -35,6 +35,7 @@ import {
 import HeroSlides from "../components/HeroSlides";
 import FeaturedSlider from "../components/FeaturedSlider";
 import CountUp from "../components/CountUp";
+import { OffersStrip, PopularGrid, HomeFaq } from "../components/HomeSections";
 import { pickBySlug, prefersReducedMotion, wideImage } from "../utils/motion";
 import { plural } from "../i18n/plural";
 
@@ -1051,6 +1052,10 @@ const Home = () => {
         </section>
       )}
 
+      <OffersStrip />
+
+      <PopularGrid states={homeStates} />
+
       {/* Featured journeys: big sliding slides */}
       <FeaturedSlider items={featuredStates} onOpen={(slug) => navigate(`/places/${slug}`)} />
 
@@ -1557,6 +1562,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <HomeFaq />
     </div>
   );
 };

@@ -379,3 +379,31 @@ h1, h2, h3, .section-title, .card-title, .hero-title { font-weight: 900; letter-
 .app-error h1 { margin: 0 0 0.5rem; font-size: 1.8rem; }
 .app-error p { max-width: 440px; margin: 0 auto 1.5rem; color: #4a4a4a; }
 .app-error-actions { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+
+/* ---------- Home sections: offers, popular destinations, FAQ ---------- */
+.hs-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; }
+.hs-head .section-title { margin: 0; }
+.hs-tabs { display: flex; gap: 1.25rem; border-bottom: 1px solid #e0e0e0; }
+.hs-tabs button { padding: 0.5rem 0.1rem; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-weight: 700; color: #4a4a4a; cursor: pointer; }
+.hs-tabs button.active { color: var(--mmt-blue); border-bottom-color: var(--mmt-blue); }
+
+.hs-offers { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.hs-offer { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.25rem; background: #fff; border-radius: 10px; box-shadow: var(--shadow-card); }
+.hs-offer h3 { margin: 0; font-size: 1.05rem; }
+.hs-offer p { margin: 0; flex: 1; color: #4a4a4a; font-size: 0.92rem; }
+.hs-offer a { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 900; color: var(--mmt-blue); text-decoration: none; }
+
+.hs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem 2rem; margin-top: 1.5rem; }
+.hs-dest { display: flex; align-items: center; gap: 0.9rem; color: inherit; text-decoration: none; }
+.hs-dest img { width: 50px; height: 50px; flex: none; border-radius: 50%; object-fit: cover; background: #ddd; }
+.hs-dest strong { display: block; font-size: 1.05rem; }
+.hs-dest small { color: #4a4a4a; }
+.hs-dest:hover strong { color: var(--mmt-blue); }
+
+.hs-faq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 3rem; margin-top: 1.25rem; }
+.hs-faq h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+.hs-faq p { margin: 0; color: #4a4a4a; font-size: 0.92rem; line-height: 1.6; }
+
+@media (max-width: 768px) {
+  .hs-grid, .hs-faq { grid-template-columns: 1fr; }
+}

@@ -48,6 +48,16 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Popular states (plain English for now: not yet translated) */}
+          <div className="footer-col">
+            <h4>Popular states</h4>
+            <ul className="footer-links">
+              {[['goa', 'Goa'], ['kerala', 'Kerala'], ['rajasthan', 'Rajasthan'], ['himachal-pradesh', 'Himachal Pradesh'], ['ladakh', 'Ladakh'], ['karnataka', 'Karnataka']].map(([slug, name]) => (
+                <li key={slug}><Link to={`/places/${slug}`}>{name}</Link></li>
+              ))}
+            </ul>
+          </div>
+
           {/* Account */}
           <div className="footer-col">
             <h4>{t('footer.account')}</h4>
