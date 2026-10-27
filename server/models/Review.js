@@ -48,6 +48,9 @@ const reviewSchema = new mongoose.Schema(
       validate: [(list) => list.length <= 3, "A review can have up to 3 photos."],
     },
 
+    // sample reviews added by scripts/seedDemoReviews.js, so they can be told apart and removed
+    isDemo: { type: Boolean, default: false },
+
     // who found this review helpful (one vote each). Only the count is shown to others.
     helpfulBy: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],

@@ -342,7 +342,7 @@ const ReviewsSection = ({ itemType, itemId }) => {
                   <span className={`rv-score r${review.rating}`}>{Number(review.rating).toFixed(1)}</span>
                   <div className="rv-who">
                     <strong>{RATING_LABELS[review.rating]}</strong>
-                    <span>{review.userName}</span>
+                    <span>{review.userName}{review.demo && <em className="rv-demo">Sample</em>}</span>
                   </div>
                   <time dateTime={review.createdAt}>
                     Reviewed {new Date(review.createdAt).toLocaleDateString(dateLocale(), {

@@ -26,6 +26,7 @@ const publicReview = (review, viewerId) => ({
   comment: review.comment,
   createdAt: review.createdAt,
   photos: (review.photos || []).map((p) => ({ url: p.url })),
+  demo: Boolean(review.isDemo),
   helpfulCount: (review.helpfulBy || []).length,
   iVoted: viewerId ? (review.helpfulBy || []).some((id) => String(id) === String(viewerId)) : false,
 });
@@ -41,7 +42,7 @@ const getReviews = async (req, res) => {
 
     const reviews = await Review.find({ itemType, itemId })
       .sort({ createdAt: -1 })
-      .select("userName rating comment createdAt user photos helpfulBy")
+      .select("userName rating comment createdAt user photos helpfulBy isDemo")
       .lean();
 
     const count = reviews.length;

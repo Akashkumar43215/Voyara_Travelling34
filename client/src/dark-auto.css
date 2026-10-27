@@ -2680,6 +2680,10 @@
 :root[data-theme="dark"] .rv-score.r2 {
   color: #ff8a8a;
 }
+:root[data-theme="dark"] .rv-demo {
+  background: #3a2a0c;
+  color: #ffb86b;
+}
 
 /* ---- i18n.css ---- */
 :root[data-theme="dark"] .lang-toggle {

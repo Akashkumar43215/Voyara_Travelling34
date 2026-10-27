@@ -79,3 +79,5 @@
   .rv-summary { grid-template-columns: minmax(0, 1fr); }
   .rv-latest { grid-column: 1; grid-row: auto; }
 }
+
+.rv-demo { margin-left: 0.5rem; padding: 1px 7px; border-radius: 999px; background: #fff4e0; color: #9b5b00; font-size: 0.68rem; font-style: normal; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
