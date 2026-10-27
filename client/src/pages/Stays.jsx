@@ -623,7 +623,7 @@ const Stays = () => {
         ))}
       </div>
 
-      <button type="button" className="hotel-filters-top" aria-label="Back to top" title="Back to top" onClick={(e) => { e.currentTarget.closest(".hotel-filters").scrollTo({ top: 0, behavior: "smooth" }); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+      <button type="button" className="hotel-filters-top" aria-label="Back to top" title="Back to top" onClick={(e) => { e.currentTarget.closest(".hotel-filters").scrollTop = 0; window.scrollTo({ top: 0, behavior: "smooth" }); }}>
         <ArrowUp size={20} />
       </button>
 
