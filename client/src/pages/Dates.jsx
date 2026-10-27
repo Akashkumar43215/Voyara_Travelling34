@@ -20,11 +20,16 @@ import {
   Users,
   BedDouble,
   Check,
+  Star,
+  Clock,
+  ShieldCheck,
 } from "lucide-react";
 
 import { getRoomsByStay } from "../services/api";
 
 import PageHero from "../components/PageHero";
+import TripPriceSummary from "../components/TripPriceSummary";
+import { tripFromState } from "../utils/trip";
 import { useLanguage } from "../context/LanguageContext";
 import { dateLocale } from "../i18n/runtime";
 const Dates = () => {
@@ -258,6 +263,27 @@ const Dates = () => {
     checkOut,
   ]);
 
+  // The same trip object the later steps use, so the server can price it
+  const liveTrip = useMemo(
+    () =>
+      tripFromState({
+        ...incoming,
+        location: selectedLocation,
+        selectedPlaces,
+        selectedStay,
+        selectedRoom,
+        checkIn,
+        checkOut,
+        rooms,
+        adults,
+        children,
+        nights,
+      }),
+    [incoming, selectedLocation, selectedPlaces, selectedStay, selectedRoom, checkIn, checkOut, rooms, adults, children, nights]
+  );
+
+  const overCapacity = Boolean(selectedRoom) && adults + children > Number(selectedRoom.maxGuests || 0) * rooms;
+
   // ======================================================
   // ROOM COUNTER
   // ======================================================
@@ -487,32 +513,47 @@ const Dates = () => {
       <section className="section">
         <div className="container">
 
+          <div className="addon-layout">
+          <div className="addon-main">
+
           {/* ==================================================
               SELECTED STAY
           ================================================== */}
 
-          <div className="dates-selected-stay">
+          <div className="ds-stay">
+            {selectedStay.image ? (
+              <img src={selectedStay.image} alt="" loading="lazy" />
+            ) : (
+              <div className="ds-stay-noimg"><Hotel size={30} /></div>
+            )}
 
-            <div className="dates-selected-stay-icon">
-              <Hotel size={28} />
-            </div>
+            <div className="ds-stay-body">
+              <span className="ds-stay-label">{tx("Selected Stay")}</span>
+              <h3>{tx(selectedStay.name)}</h3>
 
-            <div>
-              <span>
-                {tx("Selected Stay")}
-              </span>
-
-              <h3>
-                {tx(selectedStay.name)}
-              </h3>
+              {selectedStay.stars > 0 && (
+                <span className="ds-stars" aria-label={`${selectedStay.stars} star`}>
+                  {Array.from({ length: selectedStay.stars }).map((_, i) => (
+                    <Star key={i} size={13} fill="currentColor" />
+                  ))}
+                </span>
+              )}
 
               {selectedStay.address && (
-                <p>
-                  {selectedStay.address}
-                </p>
+                <p><MapPin size={13} /> {selectedStay.address}</p>
               )}
-            </div>
 
+              <div className="ds-tags">
+                {selectedStay.rating > 0 && (
+                  <span className="ds-tag blue">{Number(selectedStay.rating).toFixed(1)} {selectedStay.ratingLabel}</span>
+                )}
+                <span className={`ds-tag ${selectedStay.freeCancellation ? "green" : ""}`}>
+                  <ShieldCheck size={13} />
+                  {selectedStay.freeCancellation ? tx("Free cancellation until 24 hours before check-in") : tx("Non-refundable: this property does not offer free cancellation")}
+                </span>
+                <span className="ds-tag"><Clock size={13} /> {tx("Check-in from 12:00 PM, check-out by 11:00 AM")}</span>
+              </div>
+            </div>
           </div>
 
           {/* ==================================================
@@ -691,7 +732,17 @@ const Dates = () => {
 
                             <span>{tx("{n} available", { n: room.availableRooms })}</span>
 
+                            {Number(room.availableRooms) <= 2 && (
+                              <span className="ds-low">Only {room.availableRooms} left</span>
+                            )}
+
                           </div>
+
+                          {nights > 0 && (
+                            <p className="ds-room-total">
+                              ₹{(Number(room.pricePerNight) * nights).toLocaleString("en-IN")} for {nights} {nights === 1 ? "night" : "nights"} <small>before taxes, per room</small>
+                            </p>
+                          )}
 
                           {room.amenities
                             ?.length >
@@ -700,7 +751,7 @@ const Dates = () => {
                               {room.amenities
                                 .slice(
                                   0,
-                                  4
+                                  8
                                 )
                                 .map(
                                   (
@@ -776,6 +827,7 @@ const Dates = () => {
                     )
                   }
                 />
+                <small className="ds-day">{weekday(checkIn)}</small>
 
               </div>
 
@@ -801,10 +853,15 @@ const Dates = () => {
                     )
                   }
                 />
+                <small className="ds-day">{weekday(checkOut)}</small>
 
               </div>
 
             </div>
+
+            {nights > 0 && !dateError && (
+              <p className="ds-nights">{nights} {nights === 1 ? "night" : "nights"} · {formatDisplayDate(checkIn)} → {formatDisplayDate(checkOut)}</p>
+            )}
 
             {dateError && (
               <div className="dates-error">
@@ -895,107 +952,31 @@ const Dates = () => {
 
           </div>
 
-          {/* ==================================================
-              SUMMARY
-          ================================================== */}
-
-          <div className="dates-summary-card">
-
-            <div>
-
-              <span>
-                {tx("Trip Summary")}
-              </span>
-
-              <h3>
-                {formatDisplayDate(
-                  checkIn
-                )}
-
-                {" → "}
-
-                {formatDisplayDate(
-                  checkOut
-                )}
-              </h3>
-
-            </div>
-
-            <div className="dates-summary-details">
-
-              {selectedRoom && (
-                <span>
-                  {tx(selectedRoom.name)}
-                </span>
-              )}
-
-              <span>
-                {nights}{" "}
-                {nights === 1
-                  ? tx("Night")
-                  : tx("Nights")}
-              </span>
-
-              <span>
-                {rooms}{" "}
-                {rooms === 1
-                  ? tx("Room")
-                  : tx("Rooms")}
-              </span>
-
-              <span>
-                {adults}{" "}
-                {adults === 1
-                  ? tx("Adult")
-                  : tx("Adults")}
-              </span>
-
-              <span>
-                {children}{" "}
-                {children === 1
-                  ? tx("Child")
-                  : tx("Children")}
-              </span>
-
-            </div>
-
           </div>
 
           {/* ==================================================
-              CONTINUE
+              LIVE PRICE (calculated by the server)
           ================================================== */}
 
-          <div className="dates-actions">
+          <div className="addon-side">
+            <TripPriceSummary trip={liveTrip}>
+              <button
+                className="btn btn-primary addon-continue"
+                disabled={
+                  Boolean(dateError) ||
+                  !selectedRoom ||
+                  roomsLoading ||
+                  Boolean(roomsError) ||
+                  overCapacity
+                }
+                onClick={handleContinue}
+              >
+                {tx("Search Availability")}
 
-            <button
-              className="btn btn-primary"
-              disabled={
-                Boolean(
-                  dateError
-                ) ||
-                !selectedRoom ||
-                roomsLoading ||
-                Boolean(
-                  roomsError
-                ) ||
-                adults +
-                  children >
-                  Number(
-                    selectedRoom?.maxGuests ||
-                      0
-                  ) *
-                    rooms
-              }
-              onClick={
-                handleContinue
-              }
-            >
-              {tx("Search Availability")}
-
-              <ArrowRight
-                size={17}
-              />
-            </button>
+                <ArrowRight size={17} />
+              </button>
+            </TripPriceSummary>
+          </div>
 
           </div>
 
@@ -1089,6 +1070,11 @@ const formatDateForInput = (
 
   return `${year}-${month}-${day}`;
 };
+
+const weekday = (dateString) =>
+  dateString
+    ? new Date(`${dateString}T00:00:00`).toLocaleDateString(dateLocale(), { weekday: "long" })
+    : "";
 
 const formatDisplayDate = (
   dateString

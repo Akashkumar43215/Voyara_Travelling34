@@ -1964,6 +1964,41 @@
 :root[data-theme="dark"] .voyara-admin-service-grid li b {
   color: #7cc0ff;
 }
+:root[data-theme="dark"] .ds-stay {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .ds-stay > img,
+:root[data-theme="dark"] .ds-stay-noimg {
+  background: #12304f;
+}
+:root[data-theme="dark"] .ds-stay-body p {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .ds-tag {
+  background: #1a2438;
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .ds-tag.blue {
+  background: #12304f;
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .ds-tag.green {
+  background: #0f2e22;
+  color: #5fd38d;
+}
+:root[data-theme="dark"] .ds-low {
+  color: #ff8a8a;
+}
+:root[data-theme="dark"] .ds-room-total {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .ds-room-total small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .ds-nights {
+  background: #12304f;
+  color: #7cc0ff;
+}
 
 /* ---- about-contact.css ---- */
 :root[data-theme="dark"] .about-page,

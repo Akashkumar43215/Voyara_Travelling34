@@ -191,3 +191,30 @@
 .voyara-admin-service-grid li em { font-style: normal; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .voyara-admin-service-grid li b { color: #0b5fd6; }
 @media (max-width: 800px) { .voyara-admin-service-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Plan Your Stay: stay card, room extras, dates, live price ---------- */
+.ds-stay { display: flex; gap: 1.1rem; padding: 1rem; background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16); }
+.ds-stay > img, .ds-stay-noimg { flex: 0 0 190px; width: 190px; height: 140px; border-radius: 8px; object-fit: cover; background: #e9eef5; }
+.ds-stay-noimg { display: grid; place-items: center; color: #008cff; }
+.ds-stay-body { min-width: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+.ds-stay-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: #9b9b9b; }
+.ds-stay-body h3 { margin: 0; font-size: 1.35rem; font-weight: 900; }
+.ds-stay-body p { display: flex; align-items: flex-start; gap: 0.35rem; margin: 0; font-size: 0.86rem; color: #4a4a4a; }
+.ds-stars { display: inline-flex; gap: 2px; color: #f5a623; }
+.ds-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.3rem; }
+.ds-tag { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.25rem 0.6rem; border-radius: 999px; background: #f2f2f2; color: #4a4a4a; font-size: 0.76rem; font-weight: 700; }
+.ds-tag.blue { background: #e8f1ff; color: #0b5fd6; }
+.ds-tag.green { background: #e7f6ec; color: #217a3a; }
+
+.ds-low { color: #c4262c; font-weight: 900; }
+.ds-room-total { margin: 0.6rem 0 0; font-size: 0.95rem; font-weight: 900; color: #1a1a1a; }
+.ds-room-total small { font-weight: 400; color: #6b6b6b; }
+.ds-day { display: block; margin-top: 0.3rem; font-size: 0.8rem; font-weight: 700; color: #008cff; }
+.ds-nights { margin: 0.9rem 0 0; padding: 0.55rem 0.9rem; border-radius: 8px; background: #eaf5ff; color: #0b5fd6; font-size: 0.9rem; font-weight: 900; }
+
+
+@media (max-width: 640px) {
+  .ds-stay { flex-direction: column; }
+  .ds-stay > img, .ds-stay-noimg { flex: none; width: 100%; height: 170px; }
+}
+.addon-main .dates-room-list { grid-template-columns: minmax(0, 1fr); }
