@@ -319,3 +319,24 @@
 .cancel-confirm:disabled, .cancel-keep:disabled { opacity: 0.6; cursor: wait; }
 
 .hotels-results { min-width: 0; }
+
+/* ---------- Light sticky search bar (stays under the navbar while scrolling) ---------- */
+.hotels-bar { position: sticky; top: 72px; z-index: 90; background: #fff; color: #1a1a1a; padding: 0.6rem 0; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12); }
+.hotels-bar-back { border-color: #cfd8e3; color: #0b5fd6; }
+.hotels-bar-back:hover { background: #eaf5ff; }
+.hotels-bar-field { background: #f4f4f4; border-color: #e0e0e0; }
+.hotels-bar-field label { color: #4a4a4a; }
+.hotels-bar-field small { color: #6b6b6b; }
+.hotels-bar-search { color: #4a4a4a; }
+.hotels-bar-search input { color: #1a1a1a; }
+.hotels-bar-search input::placeholder { color: #8a8a8a; }
+.hotels-bar-search button { color: #4a4a4a; }
+
+.hotel-budget { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.6rem; }
+.hotel-budget input { flex: 1; min-width: 0; padding: 0.5rem 0.6rem; border: 1px solid #d8d8d8; border-radius: 6px; background: #f4f4f4; font: inherit; font-size: 0.85rem; }
+.hotel-budget input:focus { outline: 0; border-color: #008cff; background: #fff; }
+.hotel-budget span { font-size: 0.82rem; color: #4a4a4a; }
+
+@media (max-width: 900px) {
+  .hotels-bar { position: static; }
+}

@@ -47,3 +47,8 @@
 @media (max-width: 760px) {
   .hotel-restaurant-list { grid-template-columns: 1fr; }
 }
+
+/* light search bar: dark text for the date and guest controls */
+.hotels-bar-dates { color: #4a4a4a; }
+.hotels-bar-dates input,
+.hotels-bar-guests select { color: #1a1a1a; color-scheme: light; }

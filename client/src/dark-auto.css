@@ -1627,6 +1627,46 @@
   background: #141c2e;
   color: #e8edf5;
 }
+:root[data-theme="dark"] .hotels-bar {
+  background: #141c2e;
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .hotels-bar-back {
+  border-color: #1f3b5c;
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .hotels-bar-back:hover {
+  background: #12304f;
+}
+:root[data-theme="dark"] .hotels-bar-field {
+  background: #1a2438;
+  border-color: #2a3650;
+}
+:root[data-theme="dark"] .hotels-bar-field label {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hotels-bar-field small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .hotels-bar-search {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hotels-bar-search input {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .hotels-bar-search button {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hotel-budget input {
+  border: 1px solid #2a3650;
+  background: #1a2438;
+}
+:root[data-theme="dark"] .hotel-budget input:focus {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .hotel-budget span {
+  color: #bcc6d8;
+}
 
 /* ---- hotels-near.css ---- */
 :root[data-theme="dark"] .hotels-bar-guests select option {
@@ -1663,6 +1703,13 @@
 }
 :root[data-theme="dark"] .hotel-restaurant-meta .tag.veg {
   background: #0f2e22;
+}
+:root[data-theme="dark"] .hotels-bar-dates {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hotels-bar-dates input,
+:root[data-theme="dark"] .hotels-bar-guests select {
+  color: #e8edf5;
 }
 
 /* ---- addons.css ---- */
@@ -2436,6 +2483,39 @@
   border: 1px solid #2a3650;
   color: #e8edf5;
   background: #141c2e;
+}
+:root[data-theme="dark"] .assistant-panel {
+  border: 0;
+  background: linear-gradient(180deg, #141c2e 35%, #3a1518 72%, #d9c8f7 100%);
+}
+:root[data-theme="dark"] .assistant-head {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .assistant-head span {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .assistant-head button {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .assistant-body {
+  background: transparent;
+}
+:root[data-theme="dark"] .assistant-msg.bot {
+  border: 0;
+}
+:root[data-theme="dark"] .assistant-chips {
+  background: transparent;
+}
+:root[data-theme="dark"] .assistant-chips button {
+  border: 0;
+}
+:root[data-theme="dark"] .assistant-form {
+  background: transparent;
+  border-top: 0;
+}
+:root[data-theme="dark"] .assistant-form input {
+  border: 2px solid transparent;
+  background: linear-gradient(#141c2e, #141c2e) padding-box, linear-gradient(93deg, #2a9bff, #7a5cf0, #e0529c) border-box;
 }
 
 /* ---- unified.css ---- */

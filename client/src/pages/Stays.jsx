@@ -142,6 +142,8 @@ const EMPTY_FILTERS = {
   freeCancellation: false,
   payAtHotel: false,
   nearKm: 0,
+  minPrice: "",
+  maxPrice: "",
 };
 
 const toggleIn = (list, value) =>
@@ -297,6 +299,8 @@ const Stays = () => {
       });
       if (!ok) return false;
     }
+    if (f.minPrice !== "" && stay.price < Number(f.minPrice)) return false;
+    if (f.maxPrice !== "" && stay.price > Number(f.maxPrice)) return false;
     if (skip !== "stars" && f.stars.length && !f.stars.includes(stay.stars)) return false;
     if (skip !== "rating" && f.minRating && stay.rating < f.minRating) return false;
     if (skip !== "types" && f.types.length && !f.types.includes(stay.stayType)) return false;
@@ -377,7 +381,8 @@ const Stays = () => {
     filters.amenities.length +
     (filters.freeCancellation ? 1 : 0) +
     (filters.payAtHotel ? 1 : 0) +
-    (filters.nearKm ? 1 : 0);
+    (filters.nearKm ? 1 : 0) +
+    (filters.minPrice !== "" || filters.maxPrice !== "" ? 1 : 0);
 
   const setFilter = (key, value) => setFilters((current) => ({ ...current, [key]: value }));
 
@@ -531,6 +536,12 @@ const Stays = () => {
             <em>{counts.prices[b.id]}</em>
           </label>
         ))}
+
+        <div className="hotel-budget">
+          <input type="number" min="0" inputMode="numeric" placeholder="Min" aria-label="Minimum price per night" value={filters.minPrice} onChange={(e) => setFilter("minPrice", e.target.value)} />
+          <span>to</span>
+          <input type="number" min="0" inputMode="numeric" placeholder="Max" aria-label="Maximum price per night" value={filters.maxPrice} onChange={(e) => setFilter("maxPrice", e.target.value)} />
+        </div>
       </div>
 
       {placePoints.length > 0 && (
