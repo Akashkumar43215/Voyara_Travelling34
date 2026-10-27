@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Camera, Star, ThumbsUp, Trash2, X } from "lucide-react";
 
@@ -13,6 +13,11 @@ import {
   uploadReviewPhotos,
 } from "../services/api";
 import { dateLocale } from "../i18n/runtime";
+
+const RATING_LABELS = { 5: "Excellent", 4: "Very Good", 3: "Average", 2: "Poor", 1: "Bad" };
+
+// Same bands the hotel list uses for its overall label
+const overallLabel = (average) => (average >= 4.5 ? "Excellent" : average >= 4 ? "Very Good" : average >= 3.5 ? "Good" : "Average");
 
 const MAX_PHOTOS = 3;
 const MAX_PHOTO_MB = 3;
@@ -49,6 +54,7 @@ const ReviewsSection = ({ itemType, itemId }) => {
   const [average, setAverage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("new");
+  const [onlyPhotos, setOnlyPhotos] = useState(false);
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -83,6 +89,21 @@ const ReviewsSection = ({ itemType, itemId }) => {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [viewing]);
+
+  // Real numbers from the loaded reviews: how many gave each star, and the latest ten ratings
+  const stats = useMemo(() => {
+    const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+
+    reviews.forEach((r) => {
+      counts[r.rating] += 1;
+    });
+
+    const latest = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10);
+
+    return { counts, latest };
+  }, [reviews]);
+
+  const shownReviews = onlyPhotos ? reviews.filter((r) => r.photos?.length > 0) : reviews;
 
   const myReview = reviews.find((r) => String(r.user) === String(user?._id || user?.id));
 
@@ -203,6 +224,41 @@ const ReviewsSection = ({ itemType, itemId }) => {
         )}
       </h2>
 
+      {reviews.length > 0 && (
+        <div className="rv-summary">
+          <div className="rv-score-block">
+            <span className="rv-score big">{Number(average).toFixed(1)}</span>
+            <div>
+              <strong>{overallLabel(average)}</strong>
+              <small>{reviews.length} {reviews.length === 1 ? "Rating" : "Ratings"}</small>
+            </div>
+          </div>
+
+          <ul className="rv-bars">
+            {[5, 4, 3, 2, 1].map((star) => {
+              const percent = Math.round((stats.counts[star] / reviews.length) * 100);
+
+              return (
+                <li key={star}>
+                  <span>{RATING_LABELS[star]}</span>
+                  <div className="rv-bar"><i style={{ width: `${percent}%` }} /></div>
+                  <em>{percent}%</em>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="rv-latest">
+            <h3>Last {stats.latest.length} customer ratings <small>(latest first)</small></h3>
+            <div>
+              {stats.latest.map((r) => (
+                <span key={r._id} className={`rv-chip r${r.rating}`} title={RATING_LABELS[r.rating]}>{r.rating}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {isAuthenticated ? (
         <form className="review-form" onSubmit={handleSubmit}>
           <label>{t(myReview ? "reviews.update" : "reviews.rate")}</label>
@@ -256,9 +312,16 @@ const ReviewsSection = ({ itemType, itemId }) => {
       )}
 
       {reviews.length > 1 && (
-        <div className="review-sort" role="group" aria-label={tx("Sort reviews")}>
-          <button type="button" className={sort === "new" ? "active" : ""} onClick={() => setSort("new")}>{t("reviews.newest")}</button>
-          <button type="button" className={sort === "helpful" ? "active" : ""} onClick={() => setSort("helpful")}>{t("reviews.helpful")}</button>
+        <div className="rv-filters">
+          <div className="review-sort" role="group" aria-label={tx("Sort reviews")}>
+            <button type="button" className={sort === "new" ? "active" : ""} onClick={() => setSort("new")}>{t("reviews.newest")}</button>
+            <button type="button" className={sort === "helpful" ? "active" : ""} onClick={() => setSort("helpful")}>{t("reviews.helpful")}</button>
+          </div>
+
+          <div className="review-sort" role="group" aria-label="Filter reviews">
+            <button type="button" className={!onlyPhotos ? "active" : ""} onClick={() => setOnlyPhotos(false)}>All reviews</button>
+            <button type="button" className={onlyPhotos ? "active" : ""} onClick={() => setOnlyPhotos(true)}>Review with images</button>
+          </div>
         </div>
       )}
 
@@ -266,19 +329,23 @@ const ReviewsSection = ({ itemType, itemId }) => {
         <p className="review-empty">{t("reviews.loading")}</p>
       ) : reviews.length === 0 ? (
         <p className="review-empty">{t("reviews.empty")}</p>
+      ) : shownReviews.length === 0 ? (
+        <p className="review-empty">No reviews with images yet.</p>
       ) : (
         <ul className="review-list">
-          {reviews.map((review) => {
+          {shownReviews.map((review) => {
             const mine = myReview && review._id === myReview._id;
 
             return (
               <li key={review._id} className="review-item">
                 <div className="review-item-head">
-                  <strong>{review.userName}</strong>
-                  <StarRow value={review.rating} size={14} />
+                  <span className={`rv-score r${review.rating}`}>{Number(review.rating).toFixed(1)}</span>
+                  <div className="rv-who">
+                    <strong>{RATING_LABELS[review.rating]}</strong>
+                    <span>{review.userName}</span>
+                  </div>
                   <time dateTime={review.createdAt}>
-                    {new Date(review.createdAt).toLocaleDateString(dateLocale(), {
-                      day: "numeric",
+                    Reviewed {new Date(review.createdAt).toLocaleDateString(dateLocale(), {
                       month: "short",
                       year: "numeric",
                     })}

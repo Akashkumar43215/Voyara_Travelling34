@@ -1722,6 +1722,85 @@
 :root[data-theme="dark"] .hd-similar-btn:hover {
   background: #12304f;
 }
+:root[data-theme="dark"] .sl-address {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .sl-body {
+  border: 1px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .sl-panel {
+  border-right: 1px solid #1f3b5c;
+}
+:root[data-theme="dark"] .sl-search input {
+  background: #141c2e;
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .sl-suggest {
+  background: #141c2e;
+  border: 1px solid #1f3b5c;
+}
+:root[data-theme="dark"] .sl-suggest button:hover {
+  background: #12304f;
+}
+:root[data-theme="dark"] .sl-suggest strong {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .sl-suggest small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .sl-tabs {
+  border-bottom: 1px solid #2a3650;
+}
+:root[data-theme="dark"] .sl-tabs button {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .sl-tabs button.active {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .sl-name {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .sl-dist {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .sl-list a:hover {
+  background: #12304f;
+}
+:root[data-theme="dark"] .sl-note {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .sl-map {
+  background: #1a2438;
+}
+:root[data-theme="dark"] .sl-pin.you {
+  color: #ff8a8a;
+}
+:root[data-theme="dark"] .sl-pin.place {
+  border: 3px solid #2a3650;
+}
+:root[data-theme="dark"] .sl-pin.place i {
+  background: #141c2e;
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .sl-pin.hotel {
+  border: 2px solid #2a3650;
+}
+:root[data-theme="dark"] .sl-nearby {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .sl-open {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .sl-credit {
+  background: rgba(20, 28, 46, 0.8);
+  color: #bcc6d8;
+}
+@media (max-width: 760px) {
+  :root[data-theme="dark"] .sl-panel {
+    border-bottom: 1px solid #1f3b5c;
+  }
+}
 
 /* ---- hotels-near.css ---- */
 :root[data-theme="dark"] .hotels-bar-guests select option {
@@ -2560,6 +2639,46 @@
 }
 :root[data-theme="dark"] .review-photo-add:hover {
   background: #12304f;
+}
+:root[data-theme="dark"] .rv-summary {
+  border: 1px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .rv-score {
+  color: #7cc0ff;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .rv-score-block strong {
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .rv-score-block small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .rv-bars span {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .rv-bars em {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .rv-bar {
+  background: #1a2438;
+}
+:root[data-theme="dark"] .rv-latest h3 small {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .rv-chip {
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .rv-chip.r1,
+:root[data-theme="dark"] .rv-chip.r2 {
+  color: #ff8a8a;
+}
+:root[data-theme="dark"] .review-item-head .rv-who span {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .rv-score.r1,
+:root[data-theme="dark"] .rv-score.r2 {
+  color: #ff8a8a;
 }
 
 /* ---- i18n.css ---- */
