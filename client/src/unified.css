@@ -136,3 +136,69 @@ body, .main-content { background: var(--page-bg); }
 
 /* Destinations banner badge icon matches the other banners */
 .state-region-page .hero-badge svg { color: #ffd24d; stroke: #ffd24d; }
+
+/* ======================================================
+   PREMIUM FINISH (all pages)
+   One layer for the shared card families, so every screen gets the same
+   depth, borders, focus rings and hover lift. Colours stay on the existing tokens.
+   ====================================================== */
+:root {
+  --premium-shadow: 0 10px 30px -14px rgba(10, 42, 94, 0.28);
+  --premium-shadow-hover: 0 20px 40px -16px rgba(6, 90, 243, 0.4);
+  --premium-border: 1px solid rgba(15, 85, 200, 0.08);
+  --premium-gradient: linear-gradient(93deg, #53b2fe, #065af3);
+}
+
+/* a soft blue fade under every banner */
+.my-trips-page, .real-places-page, .dates-page, .availability-page, .trip-builder-page,
+.booking-details-page, .trip-review-page, .payment-page, .trip-confirmation-page,
+.favorites-page, .stays-page, .hotels-page { background: linear-gradient(180deg, #eef3fb 0, var(--page-bg) 380px); }
+
+/* panels and forms */
+.booking-card, .booking-summary-card, .trip-review-card, .payment-card, .confirmation-card,
+.confirmation-status-card, .confirmation-price-card, .availability-status-card, .availability-stay-card,
+.availability-room-card, .trip-builder-section, .trip-overview-card, .trip-final-summary,
+.contact-form-card, .contact-card, .about-card, .about-truth-card, .auth-card, .addon-card,
+.selected-places-summary, .reviews-summary, .stay-card, .trip-accommodation-card, .trip-room-card {
+  border: var(--premium-border); border-radius: 16px; box-shadow: var(--premium-shadow);
+}
+
+/* things you browse lift a little on hover */
+.card, .place-card, .real-place-card, .favorite-card, .hotel-card, .mmt-dest-card, .stay-card, .hd-similar-card, .addon-card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.card:hover, .place-card:hover, .real-place-card:hover, .favorite-card:hover, .hotel-card:hover,
+.mmt-dest-card:hover, .stay-card:hover, .hd-similar-card:hover, .addon-card:hover {
+  transform: translateY(-4px); box-shadow: var(--premium-shadow-hover); border-color: #b9d4fb;
+}
+
+/* section headings get the short blue underline */
+.trip-builder-heading h2, .confirmation-card-heading h2, .payment-card-heading h2,
+.booking-summary-section h3, .about-card h3, .contact-card h3 { position: relative; padding-bottom: 0.4rem; }
+.trip-builder-heading h2::after, .confirmation-card-heading h2::after, .payment-card-heading h2::after,
+.booking-summary-section h3::after, .about-card h3::after, .contact-card h3::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 36px; height: 3px; border-radius: 3px; background: var(--premium-gradient);
+}
+
+/* form fields: rounder with a clear focus ring */
+.booking-input, .payment-field input, .payment-field select, .contact-field input, .contact-field textarea,
+.contact-field select, .auth-field input, .auth-input-wrapper input {
+  border-radius: 12px; transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.booking-input:focus, .payment-field input:focus, .payment-field select:focus, .contact-field input:focus,
+.contact-field textarea:focus, .contact-field select:focus, .auth-field input:focus, .auth-input-wrapper input:focus {
+  outline: 0; border-color: #008cff; box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.15);
+}
+
+/* the main action buttons get a soft glow */
+.btn-primary, .search-btn, .auth-submit-btn { box-shadow: 0 12px 24px -12px rgba(6, 90, 243, 0.75); }
+.btn-primary:disabled, .auth-submit-btn:disabled { box-shadow: none; }
+
+/* the trip price card on later steps matches the one on Plan Your Stay */
+.trip-summary { overflow: hidden; border: var(--premium-border); border-radius: 18px; box-shadow: 0 22px 44px -20px rgba(10, 42, 94, 0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .place-card, .real-place-card, .favorite-card, .hotel-card, .mmt-dest-card, .stay-card, .hd-similar-card, .addon-card { transition: none; }
+  .card:hover, .place-card:hover, .real-place-card:hover, .favorite-card:hover, .hotel-card:hover,
+  .mmt-dest-card:hover, .stay-card:hover, .hd-similar-card:hover, .addon-card:hover { transform: none; }
+}

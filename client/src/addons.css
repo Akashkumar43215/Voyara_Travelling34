@@ -218,3 +218,46 @@
   .ds-stay > img, .ds-stay-noimg { flex: none; width: 100%; height: 170px; }
 }
 .addon-main .dates-room-list { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- Plan Your Stay: premium finish ---------- */
+.dates-page .section { padding-top: 2rem; background: linear-gradient(180deg, #eef3fb 0, #f2f2f2 320px); }
+
+.dates-page .ds-stay,
+.dates-page .dates-form-card { border: 1px solid rgba(15, 85, 200, 0.08); border-radius: 16px; box-shadow: 0 10px 30px -14px rgba(10, 42, 94, 0.28); }
+.dates-page .ds-stay > img { border-radius: 12px; box-shadow: 0 8px 20px -8px rgba(10, 42, 94, 0.5); }
+.dates-page .ds-stay-body h3 { font-size: 1.5rem; letter-spacing: -0.01em; }
+.dates-page .ds-stay-label { color: #0f55c8; }
+.dates-page .ds-tag { border: 1px solid rgba(0, 0, 0, 0.06); background: #f7f9fc; }
+.dates-page .ds-tag.blue { background: linear-gradient(93deg, #e8f1ff, #dbe9ff); border-color: #c9ddfb; }
+
+.dates-page .dates-form-heading h2 { position: relative; padding-bottom: 0.35rem; }
+.dates-page .dates-form-heading h2::after { content: ""; position: absolute; left: 0; bottom: 0; width: 38px; height: 3px; border-radius: 3px; background: linear-gradient(93deg, #53b2fe, #065af3); }
+
+/* rooms */
+.dates-page .dates-room-card { border: 1px solid #e3e9f3; border-radius: 14px; background: #fff; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.dates-page .dates-room-card:not(.disabled):hover { transform: translateY(-3px); border-color: #b9d4fb; box-shadow: 0 16px 30px -16px rgba(6, 90, 243, 0.45); }
+.dates-page .dates-room-card.selected { border: 2px solid transparent; background: linear-gradient(#f4faff, #f4faff) padding-box, linear-gradient(135deg, #53b2fe, #065af3, #7a5cf0) border-box; box-shadow: 0 18px 36px -18px rgba(6, 90, 243, 0.6); }
+.dates-page .dates-room-selected { background: linear-gradient(93deg, #2a9bff, #065af3); color: #fff; box-shadow: 0 6px 14px -6px rgba(6, 90, 243, 0.7); }
+.dates-page .dates-room-selected svg { color: #fff; }
+.dates-page .dates-room-details > strong { font-size: 1.55rem; letter-spacing: -0.02em; color: #0a2a5e; }
+.dates-page .dates-room-amenities span { border: 1px solid #e0e8f4; background: #fff; border-radius: 999px; }
+.ds-room-total { padding-top: 0.55rem; border-top: 1px dashed #d4dded; }
+
+/* dates and guests */
+.dates-page .date-field input { border: 1.5px solid #dfe6f1; border-radius: 12px; background: #f9fbff; transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+.dates-page .date-field input:focus { outline: 0; border-color: #008cff; box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.15); background: #fff; }
+.dates-page .counter-row { border-radius: 12px; }
+.dates-page .counter-controls button { border-radius: 50%; border: 1.5px solid #cfe0f7; background: #fff; color: #065af3; transition: background 0.15s ease, color 0.15s ease; }
+.dates-page .counter-controls button:not(:disabled):hover { background: #065af3; color: #fff; }
+.ds-nights { background: linear-gradient(93deg, #eaf5ff, #e0ecff); border: 1px solid #cfe2fb; }
+
+/* price card */
+.dates-page .trip-summary { position: relative; overflow: hidden; padding: 0 0 1.4rem; border: 1px solid rgba(15, 85, 200, 0.1); border-radius: 18px; box-shadow: 0 22px 44px -20px rgba(10, 42, 94, 0.45); }
+.dates-page .trip-summary > h2 { margin: 0; padding: 1.1rem 1.4rem; color: #fff; font-size: 1.1rem; letter-spacing: 0.02em; background: linear-gradient(135deg, #0a2a5e, #0f55c8); }
+.dates-page .trip-summary > :not(h2) { margin-left: 1.4rem; margin-right: 1.4rem; }
+.dates-page .trip-summary-stay { margin-top: 1.1rem; border: 1px solid #e3ebf7; border-radius: 12px; }
+.dates-page .trip-summary-total { padding: 0.8rem 1rem; border-radius: 12px; background: linear-gradient(93deg, #eef5ff, #e6efff); }
+.dates-page .trip-summary-total strong { color: #0a2a5e; font-size: 1.7rem; }
+.dates-page .addon-continue { width: calc(100% - 2.8rem); justify-content: center; height: 50px; border-radius: 14px; font-size: 1rem; letter-spacing: 0.02em; box-shadow: 0 14px 26px -12px rgba(6, 90, 243, 0.85); }
+
+@media (prefers-reduced-motion: reduce) { .dates-page .dates-room-card { transition: none; } .dates-page .dates-room-card:not(.disabled):hover { transform: none; } }

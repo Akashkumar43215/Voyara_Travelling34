@@ -1999,6 +1999,64 @@
   background: #12304f;
   color: #7cc0ff;
 }
+:root[data-theme="dark"] .dates-page .section {
+  background: linear-gradient(180deg, #12304f 0, #1a2438 320px);
+}
+:root[data-theme="dark"] .dates-page .ds-stay-label {
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .dates-page .ds-tag {
+  background: #1a2438;
+}
+:root[data-theme="dark"] .dates-page .ds-tag.blue {
+  background: linear-gradient(93deg, #12304f, #12304f);
+  border-color: #1f3b5c;
+}
+:root[data-theme="dark"] .dates-page .dates-room-card {
+  border: 1px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .dates-page .dates-room-card:not(.disabled):hover {
+  border-color: #1f3b5c;
+}
+:root[data-theme="dark"] .dates-page .dates-room-card.selected {
+  background: linear-gradient(#1a2438, #1a2438) padding-box, linear-gradient(135deg, #53b2fe, #065af3, #7a5cf0) border-box;
+}
+:root[data-theme="dark"] .dates-page .dates-room-details > strong {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .dates-page .dates-room-amenities span {
+  border: 1px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .ds-room-total {
+  border-top: 1px dashed #1f3b5c;
+}
+:root[data-theme="dark"] .dates-page .date-field input {
+  border: 1.5px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .dates-page .date-field input:focus {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .dates-page .counter-controls button {
+  border: 1.5px solid #1f3b5c;
+  background: #141c2e;
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .ds-nights {
+  background: linear-gradient(93deg, #12304f, #12304f);
+  border: 1px solid #1f3b5c;
+}
+:root[data-theme="dark"] .dates-page .trip-summary-stay {
+  border: 1px solid #1f3b5c;
+}
+:root[data-theme="dark"] .dates-page .trip-summary-total {
+  background: linear-gradient(93deg, #12304f, #12304f);
+}
+:root[data-theme="dark"] .dates-page .trip-summary-total strong {
+  color: #e8edf5;
+}
 
 /* ---- about-contact.css ---- */
 :root[data-theme="dark"] .about-page,
@@ -2646,6 +2704,57 @@
 }
 :root[data-theme="dark"] .dates-summary-card h3 {
   color: #fff;
+}
+:root[data-theme="dark"] .my-trips-page,
+:root[data-theme="dark"] .real-places-page,
+:root[data-theme="dark"] .dates-page,
+:root[data-theme="dark"] .availability-page,
+:root[data-theme="dark"] .trip-builder-page,
+:root[data-theme="dark"] .booking-details-page,
+:root[data-theme="dark"] .trip-review-page,
+:root[data-theme="dark"] .payment-page,
+:root[data-theme="dark"] .trip-confirmation-page,
+:root[data-theme="dark"] .favorites-page,
+:root[data-theme="dark"] .stays-page,
+:root[data-theme="dark"] .hotels-page {
+  background: linear-gradient(180deg, #12304f 0, var(--page-bg) 380px);
+}
+:root[data-theme="dark"] .booking-card,
+:root[data-theme="dark"] .booking-summary-card,
+:root[data-theme="dark"] .trip-review-card,
+:root[data-theme="dark"] .payment-card,
+:root[data-theme="dark"] .confirmation-card,
+:root[data-theme="dark"] .confirmation-status-card,
+:root[data-theme="dark"] .confirmation-price-card,
+:root[data-theme="dark"] .availability-status-card,
+:root[data-theme="dark"] .availability-stay-card,
+:root[data-theme="dark"] .availability-room-card,
+:root[data-theme="dark"] .trip-builder-section,
+:root[data-theme="dark"] .trip-overview-card,
+:root[data-theme="dark"] .trip-final-summary,
+:root[data-theme="dark"] .contact-form-card,
+:root[data-theme="dark"] .contact-card,
+:root[data-theme="dark"] .about-card,
+:root[data-theme="dark"] .about-truth-card,
+:root[data-theme="dark"] .auth-card,
+:root[data-theme="dark"] .addon-card,
+:root[data-theme="dark"] .selected-places-summary,
+:root[data-theme="dark"] .reviews-summary,
+:root[data-theme="dark"] .stay-card,
+:root[data-theme="dark"] .trip-accommodation-card,
+:root[data-theme="dark"] .trip-room-card {
+  border: var(--premium-border);
+}
+:root[data-theme="dark"] .card:hover,
+:root[data-theme="dark"] .place-card:hover,
+:root[data-theme="dark"] .real-place-card:hover,
+:root[data-theme="dark"] .favorite-card:hover,
+:root[data-theme="dark"] .hotel-card:hover,
+:root[data-theme="dark"] .mmt-dest-card:hover,
+:root[data-theme="dark"] .stay-card:hover,
+:root[data-theme="dark"] .hd-similar-card:hover,
+:root[data-theme="dark"] .addon-card:hover {
+  border-color: #1f3b5c;
 }
 
 /* ---- responsive.css ---- */
