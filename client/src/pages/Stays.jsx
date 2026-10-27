@@ -147,6 +147,25 @@ const EMPTY_FILTERS = {
   maxPrice: "",
 };
 
+// Page and filter panel travel to the top together, over the same time, so they move in step
+const scrollBothToTop = (panel) => {
+  const fromPage = window.scrollY;
+  const fromPanel = panel.scrollTop;
+  const start = performance.now();
+
+  const step = (now) => {
+    const t = Math.min((now - start) / 500, 1);
+    const left = 1 - (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+
+    window.scrollTo(0, fromPage * left);
+    panel.scrollTop = fromPanel * left;
+
+    if (t < 1) requestAnimationFrame(step);
+  };
+
+  requestAnimationFrame(step);
+};
+
 const toggleIn = (list, value) =>
   list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
@@ -623,7 +642,7 @@ const Stays = () => {
         ))}
       </div>
 
-      <button type="button" className="hotel-filters-top" aria-label="Back to top" title="Back to top" onClick={(e) => { e.currentTarget.closest(".hotel-filters").scrollTop = 0; window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+      <button type="button" className="hotel-filters-top" aria-label="Back to top" title="Back to top" onClick={(e) => scrollBothToTop(e.currentTarget.closest(".hotel-filters"))}>
         <ArrowUp size={20} />
       </button>
 
