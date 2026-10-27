@@ -3,6 +3,7 @@ const express = require("express");
 const {
   getRestaurants,
   getActivities,
+  getTransport,
   getCatalog,
   quote,
 } = require("../controllers/addonController");
@@ -12,6 +13,7 @@ const router = express.Router();
 // All read-only or calculation-only, so visitors can plan before logging in
 router.get("/restaurants", getRestaurants);
 router.get("/activities", getActivities);
+router.get("/transport", getTransport);
 router.get("/catalog", getCatalog);
 router.post("/quote", quote);
 

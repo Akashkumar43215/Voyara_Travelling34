@@ -1099,6 +1099,7 @@ export const hiUi = {
   "Failed to fetch room.": "कमरा लाने में विफल।",
   "Failed to fetch rooms.": "कमरे लाने में विफल।",
   "Failed to find nearby restaurants.": "आस-पास के रेस्तरां खोजने में विफल।",
+  "Failed to find nearby transport.": "आस-पास के परिवहन विकल्प खोजने में विफल।",
   "Failed to get user information.": "उपयोगकर्ता की जानकारी पाने में विफल।",
   "Failed to load admin bookings.": "एडमिन बुकिंग लोड करने में विफल।",
   "Failed to load admin statistics.": "एडमिन आँकड़े लोड करने में विफल।",

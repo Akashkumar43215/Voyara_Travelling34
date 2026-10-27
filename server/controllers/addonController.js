@@ -149,6 +149,71 @@ const getRestaurants = async (req, res) => {
 };
 
 /* ----------------------------------------------------------------------------
+ * GET /api/addons/transport?lat&lon&radius
+ * Real railway stations, airports and bus stops around a point, nearest first.
+ * -------------------------------------------------------------------------- */
+
+const MAX_BUS_STOPS = 4;
+
+const getTransport = async (req, res) => {
+  const point = readCoordinates(req, res);
+
+  if (!point) return undefined;
+
+  const radius = Math.min(20000, Math.max(1000, Number(req.query.radius) || 10000));
+  const key = `transport|${point.lat.toFixed(3)}|${point.lon.toFixed(3)}|${radius}`;
+
+  try {
+    const data = await cached(key, async () => {
+      const features = await fetchPlaces({
+        categories: "public_transport.train,public_transport.subway,public_transport.bus,airport",
+        ...point,
+        radius,
+        limit: 40,
+      });
+
+      const seen = new Set();
+      let buses = 0;
+
+      return features
+        .map((feature) => {
+          const p = feature.properties || {};
+          const isBus = (p.categories || []).some((c) => c.startsWith("public_transport.bus"));
+
+          return {
+            id: `geo:${p.place_id}`,
+            name: englishName(p),
+            kind: isBus ? "Bus stop" : titleCase(kindOf(p.categories)),
+            isBus,
+            distance: p.distance ?? null,
+            latitude: p.lat ?? null,
+            longitude: p.lon ?? null,
+          };
+        })
+        .filter((t) => {
+          const nameKey = t.name.toLowerCase();
+
+          if (!t.name || seen.has(nameKey)) return false;
+
+          seen.add(nameKey);
+
+          return true;
+        })
+        .sort((a, b) => (a.distance ?? 1e9) - (b.distance ?? 1e9))
+        // bus stops are everywhere: keep the nearest few so stations and airports stay visible
+        .filter((t) => !t.isBus || ++buses <= MAX_BUS_STOPS)
+        .map(({ isBus, ...rest }) => rest)
+        .slice(0, 15);
+    });
+
+    return res.status(200).json({ success: true, count: data.length, data });
+  } catch (error) {
+    console.error("Transport Error:", error.message);
+    return res.status(500).json({ success: false, message: "Failed to find nearby transport." });
+  }
+};
+
+/* ----------------------------------------------------------------------------
  * GET /api/addons/activities?lat&lon&radius
  * Real nearby attractions and activities, plus the fixed experiences we offer.
  * -------------------------------------------------------------------------- */
@@ -283,4 +348,4 @@ const quote = async (req, res) => {
   }
 };
 
-module.exports = { getRestaurants, getActivities, getCatalog, quote };
+module.exports = { getRestaurants, getActivities, getTransport, getCatalog, quote };

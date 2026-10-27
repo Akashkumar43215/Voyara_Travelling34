@@ -38,6 +38,7 @@ import { distanceMeters, formatMeters } from "../utils/geo";
 import PageHero from "../components/PageHero";
 import DestinationSearch from "../components/DestinationSearch";
 import FavoriteButton from "../components/FavoriteButton";
+import StayLocation from "../components/StayLocation";
 import ReviewsSection from "../components/ReviewsSection";
 import { useLanguage } from "../context/LanguageContext";
 import { plural } from "../i18n/plural";
@@ -1187,11 +1188,7 @@ const Stays = () => {
 
               {/* Location */}
               <section className="hd-section" id="hd-location">
-                <h3 className="hd-h">Location</h3>
-                <p className="hotel-locality">
-                  <MapPin size={14} />
-                  {detailStay.address || detailStay.city}
-                </p>
+                <StayLocation stay={detailStay} others={stays} />
 
                 {selectedPlaces.length > 0 && detailStay.near?.length > 0 && (
                   <>

@@ -295,6 +295,14 @@ export const getNearbyActivities = async ({ lat, lon, radius = 6000 }) => {
   return response.data;
 };
 
+export const getNearbyTransport = async ({ lat, lon, radius = 10000 }) => {
+  const response = await api.get("/addons/transport", {
+    params: { lat, lon, radius },
+  });
+
+  return response.data;
+};
+
 export const getAddonCatalog = async (roomPrice) => {
   const response = await api.get("/addons/catalog", { params: { roomPrice } });
 

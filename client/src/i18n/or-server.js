@@ -41,6 +41,7 @@ export const orServer = {
   "Failed to fetch room.": "କୋଠରୀ ଆଣିବାରେ ବିଫଳ।",
   "Failed to fetch rooms.": "କୋଠରୀ ଆଣିବାରେ ବିଫଳ।",
   "Failed to find nearby restaurants.": "ନିକଟସ୍ଥ ରେଷ୍ଟୁରାଣ୍ଟ ଖୋଜିବାରେ ବିଫଳ।",
+  "Failed to find nearby transport.": "ନିକଟସ୍ଥ ପରିବହନ ଖୋଜିବାରେ ବିଫଳ।",
   "Failed to get user information.": "ବ୍ୟବହାରକାରୀ ସୂଚନା ପାଇବାରେ ବିଫଳ।",
   "Failed to load admin bookings.": "ଆଡମିନ୍ ବୁକିଂ ଲୋଡ୍ କରିବାରେ ବିଫଳ।",
   "Failed to load admin statistics.": "ଆଡମିନ୍ ପରିସଂଖ୍ୟାନ ଲୋଡ୍ କରିବାରେ ବିଫଳ।",

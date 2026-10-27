@@ -408,3 +408,54 @@
   .hd-book { position: static; }
   .hd-title-side { width: 100%; justify-content: space-between; }
 }
+
+/* ---------- Hotel page: location with landmarks list and map ---------- */
+.sl-address { margin: 0 0 0.9rem; font-size: 0.88rem; color: #4a4a4a; }
+.sl-body { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 0; border: 1px solid #e3e9f3; border-radius: 12px; overflow: hidden; background: #fff; }
+.sl-panel { display: flex; flex-direction: column; min-width: 0; padding: 0.8rem; border-right: 1px solid #e3e9f3; }
+
+.sl-search { position: relative; display: flex; align-items: center; }
+.sl-search input { width: 100%; padding: 0.6rem 2.2rem 0.6rem 0.8rem; border: 1.5px solid #008cff; border-radius: 8px; background: #fff; color: #1a1a1a; font: inherit; font-size: 0.82rem; }
+.sl-search input:focus { outline: 0; box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.15); }
+.sl-search > svg { position: absolute; right: 0.75rem; color: #008cff; pointer-events: none; }
+.sl-suggest { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; right: 0; margin: 0; padding: 0.25rem; list-style: none; background: #fff; border: 1px solid #dbe5f3; border-radius: 10px; box-shadow: 0 14px 30px -12px rgba(10, 42, 94, 0.4); }
+.sl-suggest button { display: block; width: 100%; padding: 0.5rem 0.6rem; border: 0; border-radius: 8px; background: none; text-align: left; font: inherit; cursor: pointer; }
+.sl-suggest button:hover { background: #eaf5ff; }
+.sl-suggest strong { display: block; font-size: 0.84rem; color: #1a1a1a; }
+.sl-suggest small { color: #6b6b6b; font-size: 0.74rem; }
+
+.sl-tabs { display: flex; margin: 0.8rem 0 0.4rem; border-bottom: 1px solid #e0e0e0; }
+.sl-tabs button { flex: 1; padding: 0.6rem 0.4rem; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: 0.84rem; color: #4a4a4a; cursor: pointer; }
+.sl-tabs button.active { border-bottom-color: #008cff; color: #1a1a1a; font-weight: 900; }
+
+.sl-list { flex: 1; max-height: 380px; margin: 0; padding: 0; overflow-y: auto; list-style: none; scrollbar-width: thin; }
+.sl-list li { display: flex; align-items: center; gap: 0.3rem; }
+.sl-list label { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.55rem; padding: 0.55rem 0.2rem; font-size: 0.84rem; cursor: pointer; }
+.sl-list input { width: 16px; height: 16px; flex-shrink: 0; accent-color: #008cff; }
+.sl-name { flex: 1; min-width: 0; overflow-wrap: anywhere; color: #1a1a1a; }
+.sl-name small { display: block; font-size: 0.7rem; color: #9b9b9b; }
+.sl-dist { flex-shrink: 0; font-size: 0.8rem; color: #4a4a4a; white-space: nowrap; }
+.sl-list a { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #008cff; }
+.sl-list a:hover { background: #eaf5ff; }
+.sl-note { padding: 0.8rem 0.3rem; font-size: 0.82rem; color: #6b6b6b; }
+
+.sl-map { position: relative; min-height: 430px; overflow: hidden; background: #e5e3df; }
+.sl-tiles { position: absolute; left: 50%; top: 50%; width: 1280px; height: 768px; }
+.sl-tiles img { position: absolute; display: block; max-width: none; user-select: none; }
+.sl-pin { position: absolute; transform: translate(-50%, -100%); }
+.sl-pin.you { z-index: 3; color: #e0332b; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45)); }
+.sl-pin.place { z-index: 2; width: 14px; height: 14px; transform: translate(-50%, -50%); border: 3px solid #fff; border-radius: 50%; background: #f26a1b; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); }
+.sl-pin.place i { position: absolute; left: 50%; top: -26px; transform: translateX(-50%); padding: 2px 7px; border-radius: 6px; background: #fff; color: #1a1a1a; font-style: normal; font-size: 0.7rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
+.sl-pin.hotel { z-index: 1; width: 11px; height: 11px; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50%; background: #0b5fd6; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); }
+
+.sl-nearby { position: absolute; z-index: 4; top: 12px; right: 12px; display: flex; align-items: center; gap: 0.45rem; padding: 0.5rem 0.8rem; border-radius: 8px; background: #fff; font-size: 0.82rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); cursor: pointer; }
+.sl-nearby input { width: 16px; height: 16px; accent-color: #008cff; }
+.sl-open { position: absolute; z-index: 4; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.9rem; border: 1px solid #008cff; border-radius: 6px; background: #fff; color: #008cff; font-size: 0.78rem; font-weight: 900; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); }
+.sl-credit { position: absolute; z-index: 4; right: 0; bottom: 0; padding: 1px 6px; background: rgba(255, 255, 255, 0.8); color: #333; font-size: 0.64rem; }
+
+@media (max-width: 760px) {
+  .sl-body { grid-template-columns: minmax(0, 1fr); }
+  .sl-panel { border-right: 0; border-bottom: 1px solid #e3e9f3; }
+  .sl-list { max-height: 260px; }
+  .sl-map { min-height: 320px; }
+}

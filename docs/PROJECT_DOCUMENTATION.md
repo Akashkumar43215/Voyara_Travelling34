@@ -306,6 +306,7 @@ Base path `/api`. Replies are JSON with `success` and either `data` or `message`
 | GET | `/rooms/:roomId` | Public | One room |
 | GET | `/addons/restaurants?lat&lon&radius&limit` | Public | Restaurants near a point |
 | GET | `/addons/activities?lat&lon&radius` | Public | Experiences and nearby attractions |
+| GET | `/addons/transport?lat&lon&radius` | Public | Nearest stations, airports and a few bus stops (hotel Location map) |
 | GET | `/addons/catalog?roomPrice` | Public | Meal plans, vehicles and activity prices |
 | POST | `/addons/quote` | Public | Full price for a set of choices |
 | POST | `/bookings/check-availability` | Public | Rooms left for a date range |
