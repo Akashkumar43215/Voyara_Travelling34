@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Bot, Send, Sparkles, X, ArrowRight } from "lucide-react";
+import { Bot, Maximize2, Minimize2, Sparkles, X, ArrowRight } from "lucide-react";
 import { askAssistant } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -25,6 +25,27 @@ const loadChat = () => {
   return [WELCOME];
 };
 
+// Our own little robot that floats above the panel
+const Mascot = () => (
+  <svg className="assistant-mascot" viewBox="0 0 96 96" aria-hidden="true">
+    <ellipse cx="48" cy="90" rx="22" ry="4" fill="#000" opacity="0.12" />
+    <circle cx="14" cy="38" r="7" fill="#1e6df0" />
+    <circle cx="82" cy="38" r="7" fill="#1e6df0" />
+    <rect x="16" y="14" width="64" height="48" rx="22" fill="#fff" stroke="#dbe6f7" strokeWidth="2" />
+    <rect x="25" y="26" width="46" height="24" rx="12" fill="#0a2a5e" />
+    <ellipse cx="38" cy="38" rx="5" ry="6" fill="#53d6ff" />
+    <ellipse cx="58" cy="38" rx="5" ry="6" fill="#53d6ff" />
+    <ellipse cx="48" cy="72" rx="14" ry="10" fill="#fff" stroke="#dbe6f7" strokeWidth="2" />
+  </svg>
+);
+
+// "Plan a 3 day trip to Goa" -> first two words are highlighted
+const Bubble = ({ text }) => {
+  const [a, b, ...rest] = text.split(" ");
+
+  return <><b>{[a, b].filter(Boolean).join(" ")}</b>{rest.length ? ` ${rest.join(" ")}` : ""}</>;
+};
+
 /**
  * Floating travel assistant. Answers come from POST /api/assistant, which is rule based
  * and uses VOYARA's own data. Replies are shown as plain text, never as HTML.
@@ -38,6 +59,7 @@ const AssistantWidget = () => {
   const [messages, setMessages] = useState(loadChat);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const bodyRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -104,10 +126,13 @@ const AssistantWidget = () => {
       )}
 
       {open && (
-        <section className="assistant-panel" role="dialog" aria-label={tx("VOYARA travel assistant")}>
+        <section className={`assistant-panel ${expanded ? "expanded" : ""}`} role="dialog" aria-label={tx("VOYARA travel assistant")}>
           <header className="assistant-head">
-            <div className="assistant-avatar"><Bot size={20} /></div>
-            <div>
+            <button type="button" onClick={() => setExpanded((v) => !v)} aria-label={expanded ? "Make smaller" : "Make bigger"}>
+              {expanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
+            <Mascot />
+            <div className="assistant-title">
               <strong>{t("assistant.title")}</strong>
               <span>{t("assistant.subtitle")}</span>
             </div>
@@ -146,7 +171,7 @@ const AssistantWidget = () => {
           {last?.from === "bot" && last.suggestions?.length > 0 && !busy && (
             <div className="assistant-chips">
               {last.suggestions.map((s) => (
-                <button type="button" key={s} onClick={() => send(s)}>{s}</button>
+                <button type="button" key={s} onClick={() => send(s)}><Bubble text={s} /></button>
               ))}
             </div>
           )}
@@ -160,7 +185,7 @@ const AssistantWidget = () => {
               maxLength={300}
               aria-label={tx("Your question")}
             />
-            <button type="submit" disabled={busy || !input.trim()} aria-label={t("assistant.send")}><Send size={18} /></button>
+            <button type="submit" disabled={busy || !input.trim()} aria-label={t("assistant.send")}><Bot size={22} /></button>
           </form>
         </section>
       )}

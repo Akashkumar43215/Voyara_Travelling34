@@ -2517,6 +2517,13 @@
   border: 2px solid transparent;
   background: linear-gradient(#141c2e, #141c2e) padding-box, linear-gradient(93deg, #2a9bff, #7a5cf0, #e0529c) border-box;
 }
+:root[data-theme="dark"] .assistant-chips button {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .assistant-form button {
+  background: #12304f;
+  color: #7cc0ff;
+}
 
 /* ---- unified.css ---- */
 :root[data-theme="dark"] .my-trips-page,
