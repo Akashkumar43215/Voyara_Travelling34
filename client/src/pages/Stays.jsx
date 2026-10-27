@@ -623,8 +623,8 @@ const Stays = () => {
         ))}
       </div>
 
-      <button type="button" className="hotel-filters-top" onClick={(e) => e.currentTarget.closest(".hotel-filters").scrollTo({ top: 0, behavior: "smooth" })}>
-        Back to top <ArrowUp size={14} />
+      <button type="button" className="hotel-filters-top" aria-label="Back to top" title="Back to top" onClick={(e) => { e.currentTarget.closest(".hotel-filters").scrollTo({ top: 0, behavior: "smooth" }); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+        <ArrowUp size={20} />
       </button>
 
       <button type="button" className="btn btn-primary hotel-filters-apply" onClick={() => setFiltersOpen(false)}> {plural(tx, filteredStays.length, "Show {n} property", "Show {n} properties")} </button>
