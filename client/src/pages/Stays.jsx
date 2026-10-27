@@ -134,6 +134,15 @@ const StarRow = ({ count }) => (
   </span>
 );
 
+const DETAIL_TABS = [
+  ["overview", "Overview"],
+  ["rooms", "Rooms"],
+  ["location", "Location"],
+  ["rules", "Property rules"],
+  ["reviews", "User reviews"],
+  ["similar", "Similar properties"],
+];
+
 const EMPTY_FILTERS = {
   prices: [],
   stars: [],
@@ -405,6 +414,31 @@ const Stays = () => {
     (filters.minPrice !== "" || filters.maxPrice !== "" ? 1 : 0);
 
   const setFilter = (key, value) => setFilters((current) => ({ ...current, [key]: value }));
+
+  // Hotel details: tab bar, jump to a section, similar stays
+  const [detailTab, setDetailTab] = useState("overview");
+
+  const goToSection = (id) => {
+    setDetailTab(id);
+    document.getElementById(`hd-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const openStay = (stay) => {
+    setDetailStay(stay);
+    setDetailTab("overview");
+    document.querySelector(".hotel-modal-backdrop")?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const similarStays = useMemo(
+    () =>
+      detailStay
+        ? stays
+            .filter((s) => s.placeId !== detailStay.placeId)
+            .sort((x, y) => Math.abs(x.price - detailStay.price) - Math.abs(y.price - detailStay.price))
+            .slice(0, 6)
+        : [],
+    [stays, detailStay]
+  );
 
   // Real restaurants around the hotel, loaded when its details are opened
   useEffect(() => {
@@ -823,7 +857,7 @@ const Stays = () => {
 
                 return (
                   <article key={stay.placeId} className={`hotel-card ${isSelected ? "selected" : ""}`}>
-                    <div className="hotel-card-image" onClick={() => setDetailStay(stay)}>
+                    <div className="hotel-card-image" onClick={() => openStay(stay)}>
                       {stay.image ? (
                         <img
                           src={stay.image}
@@ -861,7 +895,7 @@ const Stays = () => {
 
                     <div className="hotel-card-body">
                       <div className="hotel-card-top">
-                        <h3 onClick={() => setDetailStay(stay)}>{tx(stay.name)}</h3>
+                        <h3 onClick={() => openStay(stay)}>{tx(stay.name)}</h3>
                         <StarRow count={stay.stars} />
                       </div>
 
@@ -923,7 +957,7 @@ const Stays = () => {
                       </div>
 
                       <div className="hotel-card-actions">
-                        <button type="button" className="hotel-btn-outline" onClick={() => setDetailStay(stay)}>
+                        <button type="button" className="hotel-btn-outline" onClick={() => openStay(stay)}>
                           {tx("View Details")}
                         </button>
 
@@ -969,7 +1003,19 @@ const Stays = () => {
               <span className="hotel-type-tag">{detailStay.stayTypeLabel}</span>
             </div>
 
+            <nav className="hd-tabs" aria-label="Sections">
+              {DETAIL_TABS.map(([id, label]) => (
+                <button key={id} type="button" className={detailTab === id ? "active" : ""} onClick={() => goToSection(id)}>
+                  {label}
+                </button>
+              ))}
+            </nav>
+
             <div className="hotel-modal-body">
+              <p className="hd-crumbs">
+                Stays <span>›</span> {locationName} <span>›</span> <strong>{tx(detailStay.name)}</strong>
+              </p>
+
               <div className="hotel-modal-title">
                 <div>
                   <h2>{tx(detailStay.name)}</h2>
@@ -980,16 +1026,29 @@ const Stays = () => {
                   </p>
                 </div>
 
-                <div className={`hotel-rating ${ratingClass(detailStay.rating)}`}>
-                  <div>
-                    <strong>{detailStay.ratingLabel}</strong>
-                    <small>{detailStay.reviewCount.toLocaleString("en-IN")} {tx("ratings")}</small>
+                <div className="hd-title-side">
+                  <FavoriteButton
+                    item={{
+                      itemType: "stay",
+                      itemId: detailStay.placeId,
+                      name: detailStay.name,
+                      image: detailStay.image || "",
+                      city: detailStay.city || locationName,
+                    }}
+                  />
+
+                  <div className={`hotel-rating ${ratingClass(detailStay.rating)}`}>
+                    <div>
+                      <strong>{detailStay.ratingLabel}</strong>
+                      <small>{detailStay.reviewCount.toLocaleString("en-IN")} {tx("ratings")}</small>
+                    </div>
+                    <span>{Number(detailStay.rating).toFixed(1)}</span>
                   </div>
-                  <span>{Number(detailStay.rating).toFixed(1)}</span>
                 </div>
               </div>
 
-              <div className="hotel-modal-grid">
+              {/* Overview: facilities on the left, booking card on the right */}
+              <div className="hotel-modal-grid hd-section" id="hd-overview">
                 <section>
                   <h3>{tx("Hotel facilities")}</h3>
                   <ul className="hotel-amenity-grid">
@@ -1010,37 +1069,6 @@ const Stays = () => {
                       ? tx("✓ marks facilities the property itself lists. The rest are typical for this kind of property.")
                       : tx("Facilities shown are typical for this kind of property. Confirm with the hotel.")}
                   </p>
-
-                  {selectedPlaces.length > 0 && detailStay.near?.length > 0 && (
-                    <>
-                      <h3>{tx("Distance from your places")}</h3>
-                      <ul className="hotel-rules">
-                        {detailStay.near.map((n) => (
-                          <li key={n.name}> <MapPin size={15} /> {tx("{dist} from {name}", { dist: formatMeters(n.meters), name: n.name })} </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-
-                  <h3>{tx("Property rules")}</h3>
-                  <ul className="hotel-rules">
-                    <li>
-                      <Clock size={15} /> {tx("Check-in from 12:00 PM, check-out by 11:00 AM")}
-                    </li>
-                    <li>
-                      <ShieldCheck size={15} />
-                      {detailStay.freeCancellation
-                        ? tx("Free cancellation until 24 hours before check-in")
-                        : tx("Non-refundable: this property does not offer free cancellation")}
-                    </li>
-                    <li>
-                      <Check size={15} />
-                      {detailStay.payAtHotel ? tx("Pay at the hotel is available") : tx("Payment is taken online at booking")}
-                    </li>
-                    <li>
-                      <Check size={15} /> {tx("Valid government photo ID is required at check-in")}
-                    </li>
-                  </ul>
 
                   {(detailStay.facilities?.phone || detailStay.facilities?.email || detailStay.facilities?.openingHours) && (
                     <ul className="hotel-rules hotel-contact">
@@ -1085,23 +1113,18 @@ const Stays = () => {
                   </div>
                 </section>
 
-                <section>
-                  <h3>{tx("Room options")}</h3>
-
-                  <ul className="hotel-room-list">
-                    {roomPreview(detailStay.price).map((room) => (
-                      <li key={room.name}>
-                        <div>
-                          <strong>{tx(room.name)}</strong>
-                          <small>{tx("Up to {n} guests", { n: room.guests })}</small>
-                        </div>
-                        <div>
-                          <strong>{money(room.price)}</strong>
-                          <small>{tx("per night + taxes")}</small>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                <section className="hd-book">
+                  <small>Per night from</small>
+                  <div className="hd-book-price">
+                    <strong>{money(detailStay.price)}</strong>
+                    <span>+ taxes</span>
+                  </div>
+                  <p className={`hd-book-policy ${detailStay.freeCancellation ? "free" : ""}`}>
+                    {detailStay.freeCancellation ? tx("Free cancellation until 24 hours before check-in") : tx("Non-refundable: this property does not offer free cancellation")}
+                  </p>
+                  <p className="hd-book-dates">
+                    {search.checkIn} → {search.checkOut} · {plural(tx, search.rooms, "{n} Room", "{n} Rooms")}, {search.adults} {tx("Adults")}
+                  </p>
 
                   <button
                     type="button"
@@ -1118,37 +1141,142 @@ const Stays = () => {
                 </section>
               </div>
 
-              <section className="hotel-restaurants">
-                <h3>{tx("Restaurants & cafes within 1.2 km")}</h3>
+              {/* Rooms */}
+              <section className="hd-section" id="hd-rooms">
+                <h3 className="hd-h">{tx("Room options")}</h3>
 
-                {restaurants.loading && <p className="hotel-fine-print">{tx("Finding places to eat...")}</p>}
+                <div className="hd-rooms">
+                  {roomPreview(detailStay.price).map((room) => (
+                    <article key={room.name} className="hd-room">
+                      <div>
+                        <strong>{tx(room.name)}</strong>
+                        <small>{tx("Up to {n} guests", { n: room.guests })}</small>
+                        <ul>
+                          <li>{detailStay.freeCancellation ? tx("Free cancellation until 24 hours before check-in") : tx("Non-refundable: this property does not offer free cancellation")}</li>
+                          <li>{detailStay.payAtHotel ? tx("Pay at the hotel is available") : tx("Payment is taken online at booking")}</li>
+                        </ul>
+                      </div>
 
-                {!restaurants.loading && restaurants.data.length === 0 && (
-                  <p className="hotel-fine-print">{tx("No restaurants were found nearby in the map data.")}</p>
+                      <div className="hd-room-price">
+                        <strong>{money(room.price)}</strong>
+                        <small>{tx("per night + taxes")}</small>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={() => {
+                            setSelectedStay(detailStay);
+                            setDetailStay(null);
+                          }}
+                        >
+                          Select
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              {/* Location */}
+              <section className="hd-section" id="hd-location">
+                <h3 className="hd-h">Location</h3>
+                <p className="hotel-locality">
+                  <MapPin size={14} />
+                  {detailStay.address || detailStay.city}
+                </p>
+
+                {selectedPlaces.length > 0 && detailStay.near?.length > 0 && (
+                  <>
+                    <h4 className="hd-sub">{tx("Distance from your places")}</h4>
+                    <ul className="hotel-rules">
+                      {detailStay.near.map((n) => (
+                        <li key={n.name}> <MapPin size={15} /> {tx("{dist} from {name}", { dist: formatMeters(n.meters), name: n.name })} </li>
+                      ))}
+                    </ul>
+                  </>
                 )}
 
-                <ul className="hotel-restaurant-list">
-                  {restaurants.data.map((r) => (
-                    <li key={r.placeId}>
-                      <div>
-                        <strong>{tx(r.name)}</strong>
-                        <small>
-                          {tx(r.type)}
-                          {r.cuisines.length > 0 && ` · ${r.cuisines.slice(0, 3).join(", ")}`}
-                        </small>
-                      </div>
+                <div className="hotel-restaurants">
+                  <h4 className="hd-sub">{tx("Restaurants & cafes within 1.2 km")}</h4>
 
-                      <div className="hotel-restaurant-meta">
-                        {r.vegetarianOnly ? <span className="tag veg">{tx("Pure veg")}</span> : r.vegetarian && <span className="tag veg">{tx("Veg options")}</span>}
-                        {r.halal && <span className="tag">{tx("Halal")}</span>}
-                        {r.distance != null && <em>{formatMeters(r.distance)}</em>}
-                      </div>
-                    </li>
-                  ))}
+                  {restaurants.loading && <p className="hotel-fine-print">{tx("Finding places to eat...")}</p>}
+
+                  {!restaurants.loading && restaurants.data.length === 0 && (
+                    <p className="hotel-fine-print">{tx("No restaurants were found nearby in the map data.")}</p>
+                  )}
+
+                  <ul className="hotel-restaurant-list">
+                    {restaurants.data.map((r) => (
+                      <li key={r.placeId}>
+                        <div>
+                          <strong>{tx(r.name)}</strong>
+                          <small>
+                            {tx(r.type)}
+                            {r.cuisines.length > 0 && ` · ${r.cuisines.slice(0, 3).join(", ")}`}
+                          </small>
+                        </div>
+
+                        <div className="hotel-restaurant-meta">
+                          {r.vegetarianOnly ? <span className="tag veg">{tx("Pure veg")}</span> : r.vegetarian && <span className="tag veg">{tx("Veg options")}</span>}
+                          {r.halal && <span className="tag">{tx("Halal")}</span>}
+                          {r.distance != null && <em>{formatMeters(r.distance)}</em>}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </section>
+
+              {/* Property rules */}
+              <section className="hd-section" id="hd-rules">
+                <h3 className="hd-h">{tx("Property rules")}</h3>
+                <ul className="hotel-rules">
+                  <li>
+                    <Clock size={15} /> {tx("Check-in from 12:00 PM, check-out by 11:00 AM")}
+                  </li>
+                  <li>
+                    <ShieldCheck size={15} />
+                    {detailStay.freeCancellation
+                      ? tx("Free cancellation until 24 hours before check-in")
+                      : tx("Non-refundable: this property does not offer free cancellation")}
+                  </li>
+                  <li>
+                    <Check size={15} />
+                    {detailStay.payAtHotel ? tx("Pay at the hotel is available") : tx("Payment is taken online at booking")}
+                  </li>
+                  <li>
+                    <Check size={15} /> {tx("Valid government photo ID is required at check-in")}
+                  </li>
                 </ul>
               </section>
 
-              <ReviewsSection itemType="stay" itemId={detailStay.placeId} />
+              {/* Reviews */}
+              <div className="hd-section" id="hd-reviews">
+                <ReviewsSection itemType="stay" itemId={detailStay.placeId} />
+              </div>
+
+              {/* Similar stays from the same search, closest in price first */}
+              {similarStays.length > 0 && (
+                <section className="hd-section" id="hd-similar">
+                  <h3 className="hd-h">Similar properties</h3>
+
+                  <div className="hd-similar">
+                    {similarStays.map((s) => (
+                      <article key={s.placeId} className="hd-similar-card">
+                        {s.image && <img src={s.image} alt="" loading="lazy" />}
+                        <div>
+                          <strong>{tx(s.name)}</strong>
+                          <StarRow count={s.stars} />
+                          <span className="hd-similar-price">{money(s.price)} <small>per night + taxes</small></span>
+                          <span className={`hd-chip ${ratingClass(s.rating)}`}>{Number(s.rating).toFixed(1)} {s.ratingLabel}</span>
+                          <button type="button" className="btn hd-similar-btn" onClick={() => openStay(s)}>
+                            View details
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
           </div>
         </div>

@@ -1667,6 +1667,61 @@
 :root[data-theme="dark"] .hotel-budget span {
   color: #bcc6d8;
 }
+:root[data-theme="dark"] .hd-tabs {
+  background: #141c2e;
+  border-bottom: 1px solid #2a3650;
+}
+:root[data-theme="dark"] .hd-tabs button {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-section + .hd-section {
+  border-top: 1px solid #2a3650;
+}
+:root[data-theme="dark"] .hd-crumbs {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-book > small {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-book-price span {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-book-policy {
+  color: #ffb86b;
+}
+:root[data-theme="dark"] .hd-book-dates {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-room {
+  border: 1px solid #1f3b5c;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .hd-room small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .hd-room ul {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .hd-similar-card {
+  border: 1px solid #2a3650;
+  background: #141c2e;
+}
+:root[data-theme="dark"] .hd-similar-card img {
+  background: #12304f;
+}
+:root[data-theme="dark"] .hd-similar-price small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .hd-chip {
+  background: #12304f;
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .hd-similar-btn {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .hd-similar-btn:hover {
+  background: #12304f;
+}
 
 /* ---- hotels-near.css ---- */
 :root[data-theme="dark"] .hotels-bar-guests select option {
