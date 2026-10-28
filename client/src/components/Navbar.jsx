@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Compass,
@@ -14,7 +14,8 @@ import {
   Heart,
   Home,
   Info,
-  Phone
+  Phone,
+  ChevronDown
 } from 'lucide-react';
 
 import { useAuth } from '../context/AuthContext';
@@ -27,6 +28,8 @@ const Navbar = () => {
   const location = useLocation();
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef(null);
 
   const {
     user,
@@ -47,7 +50,26 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setAccountOpen(false);
   }, [location.pathname]);
+
+  // The account menu closes on an outside click or Escape
+  useEffect(() => {
+    if (!accountOpen) return undefined;
+
+    const onClick = (event) => {
+      if (!accountRef.current?.contains(event.target)) setAccountOpen(false);
+    };
+    const onKey = (event) => event.key === 'Escape' && setAccountOpen(false);
+
+    document.addEventListener('mousedown', onClick);
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [accountOpen]);
 
   const isActive = (path) => {
     return location.pathname === path ? 'active' : '';
@@ -262,6 +284,25 @@ const Navbar = () => {
             {/* 3. Desktop Actions */}
             <div className="nav-actions">
 
+              {/* Over the home hero: two-line shortcuts (the tab links return once you scroll) */}
+              <div className="nav-utility">
+                <Link to="/trips" className="nav-util">
+                  <span className="nav-util-icon"><Briefcase size={18} /></span>
+                  <span className="nav-util-text">
+                    <strong>{t('nav.trips')}</strong>
+                    <small>Manage your bookings</small>
+                  </span>
+                </Link>
+
+                <Link to="/favorites" className="nav-util">
+                  <span className="nav-util-icon"><Heart size={18} /></span>
+                  <span className="nav-util-text">
+                    <strong>{t('nav.favorites')}</strong>
+                    <small>Save your favourites</small>
+                  </span>
+                </Link>
+              </div>
+
               {/* Admin (visible to admins only) */}
               {user?.role === 'admin' && (
                 <Link
@@ -278,7 +319,7 @@ const Navbar = () => {
                 <>
                   <Link
                     to="/register"
-                    className="btn btn-primary"
+                    className="btn btn-primary nav-guest-btn"
                   >
                     <UserPlus size={15} />
                     {t('nav.register')}
@@ -286,11 +327,33 @@ const Navbar = () => {
 
                   <Link
                     to="/login"
-                    className="btn btn-primary"
+                    className="btn btn-primary nav-guest-btn"
                   >
                     <User size={15} />
                     {t('nav.login')}
                   </Link>
+
+                  {/* Over the home hero: one blue pill with a small menu */}
+                  <div className="nav-account" ref={accountRef}>
+                    <button
+                      type="button"
+                      className="nav-account-btn"
+                      aria-haspopup="menu"
+                      aria-expanded={accountOpen}
+                      onClick={() => setAccountOpen((open) => !open)}
+                    >
+                      <span className="nav-account-icon"><User size={16} /></span>
+                      <span className="nav-account-text">{t('nav.login')} / {t('nav.register')}</span>
+                      <ChevronDown size={16} />
+                    </button>
+
+                    {accountOpen && (
+                      <ul className="nav-account-menu" role="menu">
+                        <li role="none"><Link role="menuitem" to="/login"><User size={15} /> {t('nav.login')}</Link></li>
+                        <li role="none"><Link role="menuitem" to="/register"><UserPlus size={15} /> {t('footer.createAccount')}</Link></li>
+                      </ul>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>

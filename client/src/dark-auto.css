@@ -1436,6 +1436,20 @@
 :root[data-theme="dark"] .announce-viewport a:hover {
   background: #141c2e;
 }
+:root[data-theme="dark"] .nav-account-icon {
+  background: rgba(20, 28, 46, 0.95);
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .nav-account-menu {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .nav-account-menu a {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .nav-account-menu a:hover {
+  background: #12304f;
+  color: #7cc0ff;
+}
 
 /* ---- hotels.css ---- */
 :root[data-theme="dark"] .hotels-page {
