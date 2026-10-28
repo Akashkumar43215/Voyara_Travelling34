@@ -461,18 +461,9 @@ const Stays = () => {
    * SELECT STAY
    */
 
-  // Selecting opens the hotel page at its rooms; the room buttons there confirm the stay.
-  // Pressing it again on a selected stay un-selects it.
   const handleSelectStay = (stay) => {
+    setSelectedStay((current) => (current?.placeId === stay.placeId ? null : stay));
     setError("");
-
-    if (selectedStay?.placeId === stay.placeId) {
-      setSelectedStay(null);
-      return;
-    }
-
-    openStay(stay);
-    setTimeout(() => goToSection("rooms"), 80);
   };
 
   /*
