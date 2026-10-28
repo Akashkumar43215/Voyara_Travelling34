@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
 
 import Navbar from "./components/Navbar";
+import TripCartBar from "./components/TripCartBar";
 import AnnouncementBar from "./components/AnnouncementBar";
 import Footer from "./components/Footer";
 import RequireLogin from "./components/RequireLogin";
@@ -31,6 +32,7 @@ const Availability = lazy(() => import("./pages/Availability"));
 const MealsFacilities = lazy(() => import("./pages/MealsFacilities"));
 const TravelActivities = lazy(() => import("./pages/TravelActivities"));
 const TripBuilder = lazy(() => import("./pages/TripBuilder"));
+const TripCheckout = lazy(() => import("./pages/TripCheckout"));
 const BookingDetails = lazy(() => import("./pages/BookingDetails"));
 const TripReview = lazy(() => import("./pages/TripReview"));
 const Payment = lazy(() => import("./pages/Payment"));
@@ -82,6 +84,7 @@ function App() {
       <div className="app-layout">
         <AnnouncementBar />
         <Navbar />
+        <TripCartBar />
 
         <main className="main-content">
           <ErrorBoundary>
@@ -109,6 +112,7 @@ function App() {
                 <Route path="/trip-builder" element={<TripBuilder />} />
 
                 {/* Book: needs an account */}
+                <Route path="/trip-checkout" element={guarded(<TripCheckout />)} />
                 <Route path="/booking-details" element={guarded(<BookingDetails />)} />
                 <Route path="/trip-review" element={guarded(<TripReview />)} />
                 <Route path="/payment" element={guarded(<Payment />)} />

@@ -310,7 +310,7 @@ Base path `/api`. Replies are JSON with `success` and either `data` or `message`
 | GET | `/addons/catalog?roomPrice` | Public | Meal plans, vehicles and activity prices |
 | POST | `/addons/quote` | Public | Full price for a set of choices |
 | POST | `/bookings/check-availability` | Public | Rooms left for a date range |
-| POST | `/bookings` | Login | Create a booking (price recalculated on the server) |
+| POST | `/bookings` | Login | Create a booking (price recalculated on the server). Optional `tripId` (`trip_` + 8 to 40 letters or digits) joins it to a multi-city trip: the traveler's own stops in one trip may not overlap (a stop may start the day another ends) and a trip has at most 6 cities |
 | GET | `/bookings/my` | Login | My bookings |
 | PATCH | `/bookings/:id/payment` | Login | Complete the demo payment |
 | GET | `/bookings/:id/cancellation` | Login | What a cancel would refund |

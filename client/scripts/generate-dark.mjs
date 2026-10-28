@@ -14,7 +14,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const src = path.join(here, "..", "src");
 
 // Light-mode files, in the order main.jsx loads them. dark.css and dark-auto.css are not inputs.
-const FILES = ["styles.css", "premium.css", "booking.css", "mmt.css", "hotels.css", "hotels-near.css", "addons.css", "about-contact.css", "admin.css", "admin-manage.css", "reviews-extra.css", "i18n.css", "assistant.css", "unified.css", "responsive.css", "animations.css"];
+const FILES = ["styles.css", "premium.css", "booking.css", "mmt.css", "hotels.css", "hotels-near.css", "addons.css", "multicity.css", "about-contact.css", "admin.css", "admin-manage.css", "reviews-extra.css", "i18n.css", "assistant.css", "unified.css", "responsive.css", "animations.css"];
 
 const DARK = {
   card: "#141c2e",

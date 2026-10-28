@@ -11,6 +11,7 @@ import './mmt.css';
 import './hotels.css';
 import './hotels-near.css';
 import './addons.css';
+import './multicity.css';
 import './about-contact.css';
 import './admin.css';
 import './admin-manage.css';

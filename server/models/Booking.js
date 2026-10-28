@@ -10,6 +10,16 @@ const bookingSchema = new mongoose.Schema(
       index: true,
     },
 
+    // Stops of one multi-city trip share this id (made by the website). Empty for a single booking.
+    // Each stop is still a normal booking: priced, paid and cancelled on its own.
+    tripId: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 64,
+      index: true,
+    },
+
     // Booking reference
     bookingReference: {
       type: String,

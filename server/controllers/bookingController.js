@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { priceBooking } = require("../services/addonCatalog");
-const { validateBookingInput } = require("../services/bookingValidation");
+const { MAX_TRIP_CITIES, findTripOverlap, validateBookingInput } = require("../services/bookingValidation");
 const { sendBookingEmail } = require("../services/emailService");
 const { isConfigured: onlinePaymentOn } = require("../services/razorpayService");
 const { refundThroughGateway } = require("./paymentController");
@@ -327,7 +327,34 @@ const createBooking = async (req, res) => {
       rooms: numberOfRooms,
       adults: numberOfAdults,
       children: numberOfChildren,
+      tripId,
     } = input.data;
+
+    // ==================================================
+    // MULTI-CITY TRIP RULES
+    // ==================================================
+    //
+    // Only this traveler's own stops count (every query filters by user), so a trip id
+    // can never reach into someone else's bookings.
+
+    if (tripId) {
+      const otherStops = await Booking.find({
+        user: req.user.userId,
+        tripId,
+        status: { $ne: "cancelled" },
+      }).select("checkIn checkOut");
+
+      if (otherStops.length >= MAX_TRIP_CITIES) {
+        return res.status(400).json({ success: false, message: `A trip can have up to ${MAX_TRIP_CITIES} cities.` });
+      }
+
+      if (findTripOverlap(otherStops, checkInDate, checkOutDate)) {
+        return res.status(409).json({
+          success: false,
+          message: "These dates overlap another city in your trip. Choose dates after your previous stop.",
+        });
+      }
+    }
 
     // ==================================================
     // CHECK ACTUAL ROOM
@@ -503,6 +530,8 @@ const createBooking = async (req, res) => {
         },
 
         accommodation,
+
+        tripId,
 
         room: {
           id: roomDocument._id.toString(),

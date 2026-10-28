@@ -95,6 +95,7 @@ server/
 - Geoapify, Pexels and Wikimedia are rate-limited. Keep the caches, time budgets and back-off. Do not call them in a loop.
 - `AuthContext` signs a user out only on a real 401 or 403 from `/auth/me`. Keep it that way, or a slow server logs everybody out.
 - The booking flow carries the trip in router state (`utils/trip.js`). New steps must forward it with `stateForNext`.
+- **Multi-city trips:** each city is a normal single-city flow whose result is saved as a "leg" in `utils/tripCart.js` (sessionStorage, 3 hours). `TripBuilder` adds legs ("Add another city"), `Dates` starts the next city when the last one ends, and `TripCheckout` (`/trip-checkout`) creates one booking per leg, all with the same `tripId`. Every city is priced, paid and cancelled on its own (`Payment` walks through the unpaid ones, `MyTrips` has "Pay now"). The server is the authority for the rules (no overlapping dates inside a trip, 6 cities at most, in `bookingController` and `services/bookingValidation.js`); the pages only check them for a faster answer. A single-city booking sends no `tripId` and is unchanged.
 - Availability is computed from overlapping bookings, not stored. Never add a stored counter without a migration plan.
 - Local MongoDB may not be installed. The owner runs their own MongoDB or Atlas. Do not assume one.
 

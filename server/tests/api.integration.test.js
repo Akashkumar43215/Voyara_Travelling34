@@ -104,6 +104,47 @@ test("API integration", { skip }, async (t) => {
     }
   });
 
+  await t.test("multi-city trip: stops are separate bookings, may touch, never overlap, and a trip id is private to its owner", async () => {
+    const room = await makeRoom(20);
+    const trip = "trip_aaaabbbbccccdddd1111";
+    const stop = (checkIn, checkOut, user = ann) => book(room, { tripId: trip, checkIn, checkOut }, user);
+
+    const first = await stop("2031-02-01", "2031-02-03");
+    assert.equal(first.status, 201);
+    assert.equal(first.json.data.tripId, trip);
+    assert.equal(first.json.data.pricing.totalAmount, 5250, "each stop is priced on its own");
+
+    assert.equal((await stop("2031-02-03", "2031-02-05")).status, 201, "starts the day the first stop ends");
+    assert.equal((await stop("2031-02-02", "2031-02-04")).status, 409, "overlaps the first stop");
+    assert.equal((await stop("2031-01-30", "2031-02-02")).status, 409, "overlaps from the other side");
+    assert.equal((await stop("2031-02-07", "2031-02-09")).status, 201, "a gap between stops is allowed");
+
+    // another traveler using the same trip id is not affected by Ann's stops
+    assert.equal((await stop("2031-02-01", "2031-02-03", bob)).status, 201);
+
+    // a cancelled stop frees its dates
+    await call("PATCH", `/api/bookings/${first.json.data._id}/cancel`, null, ann.token);
+    assert.equal((await stop("2031-02-01", "2031-02-03")).status, 201);
+
+    // a made-up trip id is refused, and a plain booking still works without one
+    assert.equal((await book(room, { tripId: "../../x", checkIn: "2031-03-01", checkOut: "2031-03-03" })).status, 400);
+    assert.equal((await book(room, { checkIn: "2031-03-01", checkOut: "2031-03-03" })).json.data.tripId, "");
+  });
+
+  await t.test("a trip can have at most six cities", async () => {
+    const room = await makeRoom(20);
+    const trip = "trip_maxsixcities0001xyz";
+
+    for (let i = 0; i < 6; i += 1) {
+      const day = String(10 + i * 2);
+      const r = await book(room, { tripId: trip, checkIn: `2031-04-${day}`, checkOut: `2031-04-${String(Number(day) + 1)}` });
+      assert.equal(r.status, 201, `stop ${i + 1}`);
+    }
+
+    const seventh = await book(room, { tripId: trip, checkIn: "2031-04-25", checkOut: "2031-04-26" });
+    assert.equal(seventh.status, 400);
+  });
+
   await t.test("a booking can only be seen, paid or cancelled by its owner", async () => {
     const room = await makeRoom(5);
     const mine = (await book(room)).json.data;

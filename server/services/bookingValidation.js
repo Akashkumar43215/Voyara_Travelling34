@@ -11,6 +11,10 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 const LIMITS = { maxNights: 30, maxRooms: 10, maxAdults: 50, maxChildren: 50 };
 
+// A multi-city trip is several bookings that share a trip id
+const MAX_TRIP_CITIES = 6;
+const TRIP_ID = /^trip_[A-Za-z0-9]{8,40}$/;
+
 const isText = (value) => typeof value === "string";
 
 const startOfTodayUtc = (now) => Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
@@ -47,6 +51,22 @@ const validateDates = (checkIn, checkOut, now = new Date()) => {
 
   return { ok: true, data: { checkInDate, checkOutDate, nights } };
 };
+
+// "" for a normal single booking, or a trip id made by the website
+const validateTripId = (value) => {
+  if (value === undefined || value === null || value === "") return { ok: true, data: "" };
+
+  if (!isText(value) || !TRIP_ID.test(value)) return fail("Invalid trip ID.");
+
+  return { ok: true, data: value };
+};
+
+/**
+ * The other stop of the same trip whose dates overlap [checkInDate, checkOutDate), or null.
+ * A stop may start on the day another one ends, so back-to-back stops are fine.
+ */
+const findTripOverlap = (others, checkInDate, checkOutDate) =>
+  others.find((other) => checkInDate < other.checkOut && checkOutDate > other.checkIn) || null;
 
 /**
  * @param body the request body
@@ -93,6 +113,10 @@ const validateBookingInput = (body, now = new Date()) => {
   if (children === null || children < 0 || children > LIMITS.maxChildren) return fail("Invalid number of children.");
   if (adults < rooms) return fail("At least one adult is required per room.");
 
+  const trip = validateTripId(body.tripId);
+
+  if (!trip.ok) return trip;
+
   return {
     ok: true,
     data: {
@@ -106,8 +130,9 @@ const validateBookingInput = (body, now = new Date()) => {
       rooms,
       adults,
       children,
+      tripId: trip.data,
     },
   };
 };
 
-module.exports = { LIMITS, validateBookingInput, validateDates };
+module.exports = { LIMITS, MAX_TRIP_CITIES, validateBookingInput, validateDates, validateTripId, findTripOverlap };

@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { validateBookingInput, validateDates } = require("../services/bookingValidation");
+const { MAX_TRIP_CITIES, findTripOverlap, validateBookingInput, validateDates, validateTripId } = require("../services/bookingValidation");
 const { priceBooking } = require("../services/addonCatalog");
 
 const NOW = new Date("2030-01-01T10:00:00Z");
@@ -89,4 +89,29 @@ test("pricing refuses negative, fractional and huge values", () => {
   for (const bad of [{ rooms: -1 }, { rooms: 1e9 }, { nights: 1e9 }, { nights: 0.5 }, { roomPricePerNight: -100 }, { adults: 1.5 }, { children: -1 }]) {
     assert.equal(priceBooking({ ...base, ...bad }).ok, false, JSON.stringify(bad));
   }
+});
+
+test("trip ids: empty for a single booking, otherwise only the website's own format", () => {
+  assert.equal(check({}).data.tripId, "");
+  assert.equal(check({ tripId: "trip_abc123def456ghi7" }).data.tripId, "trip_abc123def456ghi7");
+
+  for (const bad of ["x", "trip_", "trip_short", "trip_ok12345678$", { $gt: "" }, 12345678, "../../etc"]) {
+    assert.equal(validateTripId(bad).ok, false, String(bad));
+    assert.equal(check({ tripId: bad }).ok, false, String(bad));
+  }
+});
+
+test("trip stops may touch (check-out day = next check-in day) but never overlap", () => {
+  const stop = (a, b) => ({ checkIn: new Date(a), checkOut: new Date(b) });
+  const others = [stop("2030-01-10", "2030-01-12"), stop("2030-01-15", "2030-01-18")];
+  const d = (s) => new Date(s);
+
+  assert.equal(findTripOverlap(others, d("2030-01-12"), d("2030-01-14")), null, "starts the day the first ends");
+  assert.equal(findTripOverlap(others, d("2030-01-13"), d("2030-01-15")), null, "ends the day the second starts");
+  assert.equal(findTripOverlap(others, d("2030-01-18"), d("2030-01-20")), null, "after everything");
+  assert.equal(findTripOverlap(others, d("2030-01-11"), d("2030-01-13")), others[0], "starts inside the first");
+  assert.equal(findTripOverlap(others, d("2030-01-09"), d("2030-01-11")), others[0], "ends inside the first");
+  assert.equal(findTripOverlap(others, d("2030-01-08"), d("2030-01-20")), others[0], "wraps around both");
+  assert.equal(findTripOverlap([], d("2030-01-10"), d("2030-01-12")), null);
+  assert.equal(MAX_TRIP_CITIES, 6);
 });

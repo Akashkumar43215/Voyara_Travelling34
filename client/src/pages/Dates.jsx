@@ -22,6 +22,7 @@ import {
   Check,
   Star,
   Clock,
+  Route,
   ShieldCheck,
 } from "lucide-react";
 
@@ -29,6 +30,8 @@ import { getRoomsByStay } from "../services/api";
 
 import PageHero from "../components/PageHero";
 import TripPriceSummary from "../components/TripPriceSummary";
+import TripLegs from "../components/TripLegs";
+import { addDays, cityOf, getCart, nextStart, overlapWith } from "../utils/tripCart";
 import { tripFromState } from "../utils/trip";
 import { useLanguage } from "../context/LanguageContext";
 import { dateLocale } from "../i18n/runtime";
@@ -184,11 +187,16 @@ const Dates = () => {
   // Start from the dates and guests chosen earlier (home page / hotel search)
   const incoming = location.state || {};
 
+  // A multi-city trip: this city starts when the last saved one ends
+  const [cart] = useState(getCart);
+  const cartStart = nextStart(cart);
+  const startsAfterCart = Boolean(cartStart) && (!incoming.checkIn || incoming.checkIn < cartStart);
+
   const [checkIn, setCheckIn] =
-    useState(incoming.checkIn || tomorrow);
+    useState(startsAfterCart ? cartStart : incoming.checkIn || tomorrow);
 
   const [checkOut, setCheckOut] =
-    useState(incoming.checkOut || dayAfterTomorrow);
+    useState(startsAfterCart ? addDays(cartStart, 1) : incoming.checkOut || dayAfterTomorrow);
 
   // ======================================================
   // GUEST DETAILS
@@ -223,11 +231,20 @@ const Dates = () => {
       return tx("Check-out date must be after check-in.");
     }
 
+    const clash = overlapWith(cart, { selectedStay, selectedRoom, checkIn, checkOut });
+
+    if (clash) {
+      return `These dates overlap your stop in ${cityOf(clash)}. Choose a check-in on or after ${clash.checkOut}.`;
+    }
+
     return "";
   }, [
     checkIn,
     checkOut,
     today,
+    cart,
+    selectedStay,
+    selectedRoom,
   ]);
 
   // ======================================================
@@ -519,6 +536,20 @@ const Dates = () => {
           {/* ==================================================
               SELECTED STAY
           ================================================== */}
+
+          {cart.legs.length > 0 && (
+            <div className="dates-form-card">
+              <div className="dates-form-heading">
+                <Route size={24} />
+                <div>
+                  <h2>Your trip so far</h2>
+                  <p>This city comes after these. Check-in on or after {cartStart}; stops can't overlap.</p>
+                </div>
+              </div>
+
+              <TripLegs legs={cart.legs} />
+            </div>
+          )}
 
           <div className="ds-stay">
             {selectedStay.image ? (

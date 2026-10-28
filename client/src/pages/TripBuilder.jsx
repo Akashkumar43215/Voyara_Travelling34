@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -9,12 +9,15 @@ import {
   Clock,
   Hotel,
   MapPin,
+  Plus,
   Users,
 } from "lucide-react";
 
 import TripPriceSummary from "../components/TripPriceSummary";
 import { TRANSPORT_LABELS, mealNames, stateForNext, tripFromState } from "../utils/trip";
 import PageHero from "../components/PageHero";
+import TripLegs from "../components/TripLegs";
+import { MAX_CITIES, addLeg, cityOf, clearCart, getCart, legKey, onCartChange, overlapWith, removeLeg } from "../utils/tripCart";
 import { useLanguage } from "../context/LanguageContext";
 import { plural } from "../i18n/plural";
 import { dateLocale } from "../i18n/runtime";
@@ -24,6 +27,12 @@ const TripBuilder = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Stops already saved for a multi-city trip
+  const [cart, setCart] = useState(getCart);
+  const [cartError, setCartError] = useState("");
+
+  useEffect(() => onCartChange(() => setCart(getCart())), []);
 
   const selectedLocation = location.state?.location || null;
   const selectedPlaces = location.state?.selectedPlaces || [];
@@ -116,10 +125,42 @@ const TripBuilder = () => {
   // CONTINUE TO BOOKING DETAILS
   // ======================================================
 
+  // Saves the city on this page as a stop of the multi-city trip. False when its dates overlap another stop.
+  const saveStop = () => {
+    const clash = overlapWith(cart, wholeTrip);
+
+    if (clash) {
+      setCartError(`These dates overlap your stop in ${cityOf(clash)} (${clash.checkIn} to ${clash.checkOut}). Change the dates or remove that stop.`);
+
+      return false;
+    }
+
+    setCartError("");
+    addLeg(wholeTrip);
+
+    return true;
+  };
+
+  const handleAddCity = () => {
+    if (!selectedLocation || !selectedStay || !selectedRoom) return;
+
+    if (saveStop()) navigate("/state-region", { state: { addingCity: true } });
+  };
+
   const handleContinue = () => {
     if (!selectedLocation || !selectedStay || !selectedRoom) {
       return;
     }
+
+    // other cities are saved: book them all together on the multi-city page
+    if (cart.legs.some((leg) => leg.key !== legKey(wholeTrip))) {
+      if (saveStop()) navigate("/trip-checkout");
+
+      return;
+    }
+
+    // only this city: the usual single-city booking
+    clearCart();
 
     navigate("/booking-details", {
       state: {
@@ -543,6 +584,18 @@ const TripBuilder = () => {
               TRIP TOTAL (calculated by the server)
           ================================================== */}
 
+          {/* ==================================================
+              OTHER CITIES OF THIS TRIP
+          ================================================== */}
+
+          {cart.legs.length > 0 && (
+            <div className="trip-builder-section">
+              <h2 className="section-title">Other cities in this trip</h2>
+              <TripLegs legs={cart.legs} onRemove={removeLeg} />
+              <p className="leg-hint">The city on this page joins them when you add another city or continue. Different cities can't have overlapping dates.</p>
+            </div>
+          )}
+
           <div className="trip-builder-total">
             <TripPriceSummary trip={wholeTrip} title={tx("Trip total")} />
           </div>
@@ -551,7 +604,19 @@ const TripBuilder = () => {
               CONTINUE
           ================================================== */}
 
+          {cartError && <p className="leg-error">{cartError}</p>}
+
           <div className="trip-builder-actions">
+
+            <button
+              type="button"
+              className="btn leg-add"
+              disabled={(cart.legs.some((leg) => leg.key === legKey(wholeTrip)) ? cart.legs.length : cart.legs.length + 1) >= MAX_CITIES}
+              onClick={handleAddCity}
+            >
+              <Plus size={16} />
+              Add another city
+            </button>
 
             <button
               className="btn btn-primary"

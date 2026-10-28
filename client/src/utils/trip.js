@@ -60,6 +60,57 @@ export const quoteRequest = (trip) => ({
   activities: (trip.activities || []).map((a) => ({ id: a.id, name: a.name })),
 });
 
+/**
+ * The body of POST /api/bookings for one stop of a trip: the choices only, never a price.
+ * `tripId` is set for the stops of a multi-city trip.
+ */
+export const bookingPayload = (trip, traveler, tripId = "") => {
+  const { location, selectedStay: stay, selectedRoom: room } = trip;
+
+  return {
+    destination: {
+      name: location.name || location.city || "Unknown Destination",
+      city: location.city || "",
+      state: location.state || "",
+      country: location.country || "India",
+      latitude: location.lat ?? location.latitude ?? null,
+      longitude: location.lon ?? location.longitude ?? null,
+    },
+    selectedPlaces: (trip.selectedPlaces || []).map((place) => ({
+      placeId: place.placeId || place.id || place.geoapifyPlaceId || "",
+      name: place.name || "Tourist Place",
+      city: place.city || "",
+      state: place.state || "",
+    })),
+    traveler: { name: traveler.name.trim(), email: traveler.email.trim().toLowerCase(), phone: traveler.phone.trim() },
+    accommodation: {
+      placeId: stay.geoapifyPlaceId || stay.placeId || stay.id || "",
+      name: stay.name || "",
+      address: stay.address || "",
+      city: stay.city || "",
+      state: stay.state || "",
+    },
+    room: {
+      id: room._id || room.id || "",
+      name: room.name || "",
+      guests: Number(room.maxGuests || 1),
+      pricePerNight: Number(room.pricePerNight || 0),
+    },
+    checkIn: trip.checkIn,
+    checkOut: trip.checkOut,
+    rooms: Number(trip.rooms),
+    adults: Number(trip.adults),
+    children: Number(trip.children),
+    nights: Number(trip.nights),
+    meals: trip.meals,
+    transport: trip.transport
+      ? { mode: trip.transport.mode, ac: trip.transport.ac, vehicles: trip.transport.vehicles, days: trip.transport.days }
+      : null,
+    activities: (trip.activities || []).map((a) => ({ id: a.id, name: a.name })),
+    ...(tripId ? { tripId } : {}),
+  };
+};
+
 export const hasTripBasics = (trip) =>
   Boolean(trip.location && trip.selectedStay && trip.selectedRoom && trip.checkIn && trip.checkOut && trip.nights > 0);
 

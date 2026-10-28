@@ -43,6 +43,9 @@ const Payment = () => {
 
   const booking = location.state?.booking || null;
 
+  // Multi-city trip: the cities still to pay, and the ones already paid (each city is its own booking)
+  const trip = location.state?.trip || null;
+
   const [method, setMethod] = useState("card");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
@@ -121,6 +124,19 @@ const Payment = () => {
   const bookingStatus =
     booking.status || "pending";
 
+  // After a payment: on to the next city of the trip, or to the confirmation when none is left
+  const goNext = (paidBooking) => {
+    const paid = [...(trip?.paid || []), paidBooking];
+
+    if (trip?.pending?.length) {
+      navigate("/payment", { replace: true, state: { booking: trip.pending[0], trip: { pending: trip.pending.slice(1), paid } } });
+
+      return;
+    }
+
+    navigate("/trip-confirmation", { state: { booking: paidBooking, paymentSuccessful: true, trip: trip ? { paid } : undefined } });
+  };
+
   // ======================================================
   // PAYMENT
   // ======================================================
@@ -151,7 +167,7 @@ const Payment = () => {
             try {
               const response = await verifyPayment(bookingId, result);
 
-              navigate("/trip-confirmation", { state: { booking: response.data, paymentSuccessful: true } });
+              goNext(response.data);
               resolve();
             } catch (verifyError) {
               reject(verifyError);
@@ -205,12 +221,7 @@ const Payment = () => {
     // ----------------------------------------------------
 
     if (paymentStatus === "paid") {
-      navigate("/trip-confirmation", {
-        state: {
-          booking,
-          paymentSuccessful: true,
-        },
-      });
+      goNext(booking);
 
       return;
     }
@@ -244,12 +255,7 @@ const Payment = () => {
       // PAYMENT SUCCESS
       // --------------------------------------------------
 
-      navigate("/trip-confirmation", {
-        state: {
-          booking: response.data,
-          paymentSuccessful: true,
-        },
-      });
+      goNext(response.data);
 
     } catch (error) {
       console.error(
@@ -299,6 +305,22 @@ const Payment = () => {
         {/* ==================================================
             PAYMENT LAYOUT
         ================================================== */}
+
+        {trip && (
+          <div className="leg-pay-note">
+            <strong>
+              City {trip.paid.length + 1} of {trip.paid.length + trip.pending.length + 1}: {booking.destination?.city || booking.destination?.name}
+            </strong>
+            <span>
+              {trip.pending.length > 0
+                ? `Each city of your trip is paid on its own. ${trip.pending.length} more after this one.`
+                : "This is the last city of your trip."}
+            </span>
+            <button type="button" className="leg-pay-later" onClick={() => navigate("/trips")}>
+              Pay the rest later in My Trips
+            </button>
+          </div>
+        )}
 
         <div className="payment-layout">
 

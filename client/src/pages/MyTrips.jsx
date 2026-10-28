@@ -388,6 +388,19 @@ const MyTrips = () => {
                       {booking.bookingReference}
                     </span>
 
+                    {booking.tripId && (
+                      <span className="booking-trip-chip">
+                        Multi-city trip
+                        {booking.status !== "cancelled" && (() => {
+                          const stops = bookings
+                            .filter((b) => b.tripId === booking.tripId && b.status !== "cancelled")
+                            .sort((a, b) => new Date(a.checkIn) - new Date(b.checkIn));
+
+                          return ` · city ${stops.findIndex((b) => b._id === booking._id) + 1} of ${stops.length}`;
+                        })()}
+                      </span>
+                    )}
+
                     <h2>
                       {booking.destination?.name ||
                         tx("India Trip")}
@@ -619,6 +632,16 @@ const MyTrips = () => {
                         </button>
                       </>
                     )
+                  )}
+
+                  {booking.status !== "cancelled" && booking.paymentStatus === "pending" && (
+                    <button
+                      type="button"
+                      className="booking-pay-btn"
+                      onClick={() => navigate("/payment", { state: { booking } })}
+                    >
+                      Pay now
+                    </button>
                   )}
 
                   <button

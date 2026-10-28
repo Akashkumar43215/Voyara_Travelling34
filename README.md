@@ -170,7 +170,7 @@ postman/           API collection
 | Places | `GET /api/states`, `GET /api/places`, `GET /api/location/places` |
 | Hotels | `GET /api/location/stays`, `GET /api/rooms/stay/:id` |
 | Add-ons | `GET /api/addons/restaurants`, `/activities`, `/catalog`, `POST /api/addons/quote` |
-| Bookings | `POST /api/bookings`, `GET /api/bookings/my`, `GET /:id/cancellation`, `PATCH /:id/cancel`, `PATCH /:id/dates` (change dates, `dryRun` previews), `PATCH /:id/payment` |
+| Bookings | `POST /api/bookings` (optional `tripId` links the stops of a multi-city trip), `GET /api/bookings/my`, `GET /:id/cancellation`, `PATCH /:id/cancel`, `PATCH /:id/dates` (change dates, `dryRun` previews), `PATCH /:id/payment` |
 | Reviews & favorites | `/api/reviews/...`, `/api/favorites/...` |
 | Contact | `POST /api/contact` (public, rate limited) |
 | Admin | `GET /api/admin/stats`, `GET /api/admin/bookings?q=&status=&paymentStatus=&page=&limit=`, `GET /api/admin/bookings/export` (CSV), `PATCH /api/admin/bookings/:id/cancel` (optional refund), `GET /api/admin/users`, `PATCH /api/admin/users/:id/role`, `GET /api/admin/revenue?range=30d|12m`, `GET /api/admin/messages`, `PATCH /api/admin/messages/:id/read`, `POST /api/upload/...` (admin only) |

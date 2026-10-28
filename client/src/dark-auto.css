@@ -2178,6 +2178,80 @@
   color: #e8edf5;
 }
 
+/* ---- multicity.css ---- */
+:root[data-theme="dark"] .leg {
+  border: 1px solid #1f3b5c;
+  background: #1a2438;
+}
+:root[data-theme="dark"] .leg-body strong {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .leg-body span {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .leg-body small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .leg-price {
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .leg-booked {
+  background: #0f2e22;
+  color: #5fd38d;
+}
+:root[data-theme="dark"] .leg-remove {
+  background: #12304f;
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .leg-remove:hover {
+  background: #3a1518;
+  color: #ff8a8a;
+}
+:root[data-theme="dark"] .leg-add {
+  background: #141c2e;
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .leg-add:hover:not(:disabled) {
+  background: #12304f;
+}
+:root[data-theme="dark"] .leg-hint {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .leg-error {
+  background: #3a1518;
+  color: #ff8a8a;
+}
+:root[data-theme="dark"] .cartbar-go:hover {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .leg-pay-note {
+  border: 1px solid #1f3b5c;
+  background: #12304f;
+  color: #e8edf5;
+}
+:root[data-theme="dark"] .leg-pay-note span {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .leg-pay-later {
+  color: #7cc0ff;
+}
+:root[data-theme="dark"] .leg-confirm {
+  background: #141c2e;
+}
+:root[data-theme="dark"] .leg-confirm li {
+  background: #1a2438;
+}
+:root[data-theme="dark"] .leg-confirm li span {
+  color: #bcc6d8;
+}
+:root[data-theme="dark"] .leg-confirm li small {
+  color: #a3afc4;
+}
+:root[data-theme="dark"] .booking-trip-chip {
+  background: #12304f;
+  color: #7cc0ff;
+}
+
 /* ---- about-contact.css ---- */
 :root[data-theme="dark"] .about-page,
 :root[data-theme="dark"] .contact-page {

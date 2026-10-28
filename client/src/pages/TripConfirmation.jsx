@@ -103,6 +103,29 @@ const TripConfirmation = () => {
 
         </div>
 
+        {location.state?.trip?.paid?.length > 1 && (
+          <div className="leg-confirm">
+            <h2>Your multi-city trip</h2>
+
+            <ol>
+              {location.state.trip.paid.map((paid) => (
+                <li key={paid._id}>
+                  <div>
+                    <strong>{paid.destination?.city || paid.destination?.name}</strong>
+                    <span>{paid.accommodation?.name}</span>
+                    <small>{String(paid.checkIn).slice(0, 10)} → {String(paid.checkOut).slice(0, 10)} · {paid.bookingReference}</small>
+                  </div>
+                  <strong>₹{Number(paid.pricing?.totalAmount || 0).toLocaleString("en-IN")}</strong>
+                </li>
+              ))}
+            </ol>
+
+            <p>
+              Total paid for {location.state.trip.paid.length} cities: <strong>₹{location.state.trip.paid.reduce((sum, paid) => sum + Number(paid.pricing?.totalAmount || 0), 0).toLocaleString("en-IN")}</strong>
+            </p>
+          </div>
+        )}
+
         {/* ==================================================
             STATUS
         ================================================== */}
