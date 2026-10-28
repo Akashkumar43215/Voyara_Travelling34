@@ -1450,6 +1450,30 @@
   background: #12304f;
   color: #7cc0ff;
 }
+:root[data-theme="dark"] .navbar-wrapper {
+  background: linear-gradient(180deg, #141c2e 0%, #1a2438 100%);
+}
+:root[data-theme="dark"] .lang-toggle,
+:root[data-theme="dark"] .theme-toggle {
+  background: linear-gradient(180deg, #141c2e 0%, #12304f 100%);
+}
+@media (min-width: 901px) {
+  :root[data-theme="dark"] .nav-menu .nav-link {
+    background: linear-gradient(180deg, #141c2e 0%, #12304f 100%);
+  }
+  :root[data-theme="dark"] .nav-menu .nav-link:hover {
+    background: linear-gradient(180deg, #141c2e 0%, #12304f 100%);
+  }
+  :root[data-theme="dark"] .nav-menu .nav-link.active {
+    background: linear-gradient(180deg, #12304f 0%, #12304f 100%);
+  }
+}
+:root[data-theme="dark"] .nav-util-icon {
+  background: radial-gradient(circle at 32% 26%, rgba(20, 28, 46, 0.7) 0%, rgba(255, 255, 255, 0.2) 38%, rgba(10, 30, 70, 0.55) 100%);
+}
+:root[data-theme="dark"] .nav-util:hover .nav-util-icon {
+  background: radial-gradient(circle at 32% 26%, rgba(20, 28, 46, 0.85) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(10, 30, 70, 0.5) 100%);
+}
 
 /* ---- hotels.css ---- */
 :root[data-theme="dark"] .hotels-page {

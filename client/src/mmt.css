@@ -451,11 +451,11 @@ h1, h2, h3, .section-title, .card-title, .hero-title { font-weight: 900; letter-
 @media (min-width: 1500px) {
   .on-hero .nav-menu { display: none; }
   .on-hero .nav-guest-btn { display: none; }
-  .on-hero .nav-utility { display: flex; align-items: center; flex: 1 1 auto; justify-content: center; }
+  .on-hero .nav-utility { display: flex; align-items: center; flex: 1 1 0; min-width: 0; justify-content: center; }
   .on-hero .nav-account { display: block; position: relative; }
 }
 
-.nav-util { display: flex; align-items: center; gap: 0.65rem; width: 204px; padding: 0 1rem; color: #fff; text-decoration: none; }
+.nav-util { display: flex; align-items: center; gap: 0.65rem; flex: 0 1 204px; min-width: 0; padding: 0 0.8rem; color: #fff; text-decoration: none; }
 .nav-util + .nav-util { border-left: 1px dotted rgba(255, 255, 255, 0.4); }
 .nav-util-icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); color: #ffd24d; transition: background 0.2s ease, transform 0.2s ease; }
 .nav-util:hover .nav-util-icon { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
@@ -470,3 +470,115 @@ h1, h2, h3, .section-title, .card-title, .hero-title { font-weight: 900; letter-
 .nav-account-menu { position: absolute; z-index: 120; right: 0; top: calc(100% + 8px); width: 100%; margin: 0; padding: 0.35rem; list-style: none; background: #fff; border-radius: 10px; box-shadow: 0 18px 38px -14px rgba(10, 42, 94, 0.5); }
 .nav-account-menu a { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.7rem; border-radius: 8px; color: #1a1a1a; font-size: 0.88rem; font-weight: 700; text-decoration: none; }
 .nav-account-menu a:hover { background: #eaf5ff; color: #065af3; }
+
+/* ======================================================
+   3D NAVBAR
+   Only shadows, gradients and small transforms: nothing here changes any size,
+   so the bar keeps one size in every language. Everything flat-presses on click.
+   ====================================================== */
+
+/* the bar floats: a bright top edge, a darker ledge and two soft shadows below */
+.navbar-wrapper {
+  background: linear-gradient(180deg, #ffffff 0%, #f3f7fd 100%);
+  border-bottom: 1px solid rgba(15, 85, 200, 0.14);
+  box-shadow:
+    inset 0 -1px 0 #ffffff,
+    0 2px 0 rgba(10, 42, 94, 0.05),
+    0 12px 22px -10px rgba(10, 42, 94, 0.38),
+    0 26px 40px -26px rgba(10, 42, 94, 0.45);
+}
+.navbar-wrapper.on-hero {
+  background: linear-gradient(180deg, rgba(4, 12, 28, 0.62) 0%, rgba(4, 12, 28, 0) 100%);
+  background-clip: padding-box; /* else the gradient repeats into the 1px border and draws a dark line */
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+/* the logo is a raised tile */
+.nav-brand-logo {
+  background: linear-gradient(145deg, #5bb8ff 0%, #1e6df0 55%, #0a3fb0 100%);
+  box-shadow:
+    inset 0 2px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -3px 4px rgba(0, 20, 80, 0.45),
+    0 4px 0 #0a3a9e,
+    0 10px 16px -6px rgba(6, 60, 180, 0.7);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.nav-brand:hover .nav-brand-logo { transform: perspective(300px) rotateX(10deg) rotateY(-12deg) translateY(-2px); }
+.nav-brand:active .nav-brand-logo { transform: translateY(3px); box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.5), inset 0 -2px 3px rgba(0, 20, 80, 0.4), 0 1px 0 #0a3a9e, 0 4px 8px -4px rgba(6, 60, 180, 0.6); }
+
+/* buttons: a coloured ledge underneath that disappears when pressed */
+.navbar-wrapper .nav-actions .btn-primary {
+  background: linear-gradient(180deg, #56b4ff 0%, #1e6df0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 4px 0 #0a47b8,
+    0 12px 18px -8px rgba(6, 90, 243, 0.75);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.navbar-wrapper .nav-actions .btn-primary:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 6px 0 #0a47b8, 0 16px 22px -8px rgba(6, 90, 243, 0.8); }
+.navbar-wrapper .nav-actions .btn-primary:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 0 #0a47b8, 0 4px 8px -4px rgba(6, 90, 243, 0.6); }
+
+/* Register is the white button: same ledge, grey-blue */
+.navbar-wrapper .nav-actions a.btn-primary:first-of-type { box-shadow: inset 0 0 0 1.5px #008cff, 0 4px 0 #b4c9e6, 0 12px 18px -8px rgba(10, 42, 94, 0.45) !important; }
+.navbar-wrapper .nav-actions a.btn-primary:first-of-type:hover { box-shadow: inset 0 0 0 1.5px #008cff, 0 6px 0 #b4c9e6, 0 16px 22px -8px rgba(10, 42, 94, 0.5) !important; }
+.navbar-wrapper .nav-actions a.btn-primary:first-of-type:active { box-shadow: inset 0 0 0 1.5px #008cff, 0 1px 0 #b4c9e6 !important; }
+.on-hero .nav-actions a.btn-primary:first-of-type { box-shadow: 0 4px 0 #aebdd3, 0 12px 18px -8px rgba(0, 0, 0, 0.6) !important; }
+.on-hero .nav-actions a.btn-primary:first-of-type:active { box-shadow: 0 1px 0 #aebdd3 !important; }
+
+/* language and theme: round raised keys */
+.lang-toggle, .theme-toggle {
+  background: linear-gradient(180deg, #ffffff 0%, #e8f0fb 100%);
+  border-color: rgba(15, 85, 200, 0.18);
+  box-shadow: inset 0 1px 0 #ffffff, 0 3px 0 #c3d3ea, 0 10px 14px -8px rgba(10, 42, 94, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.lang-toggle:hover, .theme-toggle:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 #ffffff, 0 5px 0 #c3d3ea, 0 14px 18px -8px rgba(10, 42, 94, 0.5); }
+.lang-toggle:active, .theme-toggle:active { transform: translateY(2px); box-shadow: inset 0 2px 4px rgba(10, 42, 94, 0.25); }
+.on-hero .lang-toggle, .on-hero .theme-toggle {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), 0 3px 0 rgba(0, 0, 0, 0.35), 0 10px 14px -8px rgba(0, 0, 0, 0.6);
+}
+
+/* tab links (shown on every page except over the wide home hero) behave like keycaps */
+@media (min-width: 901px) {
+  .nav-menu .nav-link {
+    background: linear-gradient(180deg, #ffffff 0%, #eef3fa 100%);
+    box-shadow: inset 0 1px 0 #ffffff, 0 3px 0 #cbd9ec, 0 9px 12px -6px rgba(10, 42, 94, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  }
+  .nav-menu .nav-link:hover { transform: translateY(-2px); background: linear-gradient(180deg, #ffffff 0%, #e4effd 100%); box-shadow: inset 0 1px 0 #ffffff, 0 5px 0 #cbd9ec, 0 14px 16px -8px rgba(10, 42, 94, 0.4); }
+  .nav-menu .nav-link.active { transform: translateY(2px); background: linear-gradient(180deg, #dcecff 0%, #eaf4ff 100%); box-shadow: inset 0 3px 6px rgba(10, 42, 94, 0.22), inset 0 -1px 0 #ffffff; }
+  .nav-menu .nav-link.active::after { display: none; }
+
+  .on-hero .nav-menu .nav-link { background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.08) 100%); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 3px 0 rgba(0, 0, 0, 0.3), 0 9px 12px -6px rgba(0, 0, 0, 0.55); }
+  .on-hero .nav-menu .nav-link:hover { background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.14) 100%); }
+  .on-hero .nav-menu .nav-link.active { background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%); box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.45), inset 0 -1px 0 rgba(255, 255, 255, 0.25); }
+}
+
+/* the round icons over the hero are glossy spheres that tilt toward you */
+.nav-util-icon {
+  background: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 38%, rgba(10, 30, 70, 0.55) 100%);
+  box-shadow:
+    inset -3px -5px 9px rgba(0, 10, 40, 0.5),
+    inset 2px 3px 5px rgba(255, 255, 255, 0.45),
+    0 9px 14px -6px rgba(0, 0, 0, 0.7);
+}
+.nav-util:hover .nav-util-icon { background: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(10, 30, 70, 0.5) 100%); transform: perspective(260px) rotateX(14deg) rotateY(-14deg) translateY(-4px); box-shadow: inset -3px -5px 9px rgba(0, 10, 40, 0.5), inset 2px 3px 5px rgba(255, 255, 255, 0.5), 0 16px 18px -8px rgba(0, 0, 0, 0.75); }
+.nav-util:active .nav-util-icon { transform: translateY(2px); }
+
+/* the blue account slab: a thick ledge, presses flat */
+.nav-account-btn {
+  background: linear-gradient(180deg, #56b4ff 0%, #1e6df0 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 5px 0 #0a47b8, 0 14px 22px -8px rgba(6, 90, 243, 0.85);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.nav-account-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 7px 0 #0a47b8, 0 18px 26px -8px rgba(6, 90, 243, 0.9); }
+.nav-account-btn:active { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 0 #0a47b8, 0 4px 8px -4px rgba(6, 90, 243, 0.6); }
+.nav-account-icon { box-shadow: inset 0 -2px 3px rgba(6, 90, 243, 0.25), 0 2px 4px rgba(0, 20, 80, 0.4); }
+.nav-account-menu { box-shadow: 0 6px 0 #c3d3ea, 0 24px 40px -14px rgba(10, 42, 94, 0.6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-brand:hover .nav-brand-logo, .nav-util:hover .nav-util-icon, .navbar-wrapper .nav-actions .btn-primary:hover,
+  .lang-toggle:hover, .theme-toggle:hover, .nav-account-btn:hover, .nav-menu .nav-link:hover { transform: none; }
+}
