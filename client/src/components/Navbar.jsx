@@ -281,27 +281,43 @@ const Navbar = () => {
               )}
             </ul>
 
+            {/* Over the home hero (wide screens): two-line shortcuts in the middle of the bar */}
+            <div className="nav-utility">
+              <Link to="/state-region" className="nav-util">
+                <span className="nav-util-icon"><Compass size={20} /></span>
+                <span className="nav-util-text">
+                  <strong>{t('nav.destinations')}</strong>
+                  <small>Explore 36 states</small>
+                </span>
+              </Link>
+
+              <Link to="/stays" className="nav-util">
+                <span className="nav-util-icon"><Hotel size={20} /></span>
+                <span className="nav-util-text">
+                  <strong>{t('nav.stays')}</strong>
+                  <small>Hotels and villas</small>
+                </span>
+              </Link>
+
+              <Link to="/trips" className="nav-util">
+                <span className="nav-util-icon"><Briefcase size={20} /></span>
+                <span className="nav-util-text">
+                  <strong>{t('nav.trips')}</strong>
+                  <small>Manage bookings</small>
+                </span>
+              </Link>
+
+              <Link to="/favorites" className="nav-util">
+                <span className="nav-util-icon"><Heart size={20} /></span>
+                <span className="nav-util-text">
+                  <strong>{t('nav.favorites')}</strong>
+                  <small>Save favourites</small>
+                </span>
+              </Link>
+            </div>
+
             {/* 3. Desktop Actions */}
             <div className="nav-actions">
-
-              {/* Over the home hero: two-line shortcuts (the tab links return once you scroll) */}
-              <div className="nav-utility">
-                <Link to="/trips" className="nav-util">
-                  <span className="nav-util-icon"><Briefcase size={18} /></span>
-                  <span className="nav-util-text">
-                    <strong>{t('nav.trips')}</strong>
-                    <small>Manage your bookings</small>
-                  </span>
-                </Link>
-
-                <Link to="/favorites" className="nav-util">
-                  <span className="nav-util-icon"><Heart size={18} /></span>
-                  <span className="nav-util-text">
-                    <strong>{t('nav.favorites')}</strong>
-                    <small>Save your favourites</small>
-                  </span>
-                </Link>
-              </div>
 
               {/* Admin (visible to admins only) */}
               {user?.role === 'admin' && (

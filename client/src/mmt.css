@@ -446,17 +446,18 @@ h1, h2, h3, .section-title, .card-title, .hero-title { font-weight: 900; letter-
 /* ---------- Home navbar over the hero: brand, two-line shortcuts, blue account pill ---------- */
 .nav-utility, .nav-account { display: none; }
 
-@media (min-width: 901px) {
-  /* over the hero the tab links give way to the shortcuts; the hero's own tab card carries the rest */
+/* Wide screens only: the four shortcuts fill the middle, the blue pill sits on the right.
+   On smaller screens the usual icon-tab navbar stays, because everything would not fit. */
+@media (min-width: 1500px) {
   .on-hero .nav-menu { display: none; }
   .on-hero .nav-guest-btn { display: none; }
-  .on-hero .nav-utility { display: flex; align-items: center; gap: 1.25rem; margin-right: 0.6rem; }
+  .on-hero .nav-utility { display: flex; align-items: center; flex: 1 1 auto; justify-content: center; }
   .on-hero .nav-account { display: block; position: relative; }
-  .on-hero .navbar { justify-content: space-between; }
 }
 
-.nav-util { display: flex; align-items: center; gap: 0.6rem; width: 168px; color: #fff; text-decoration: none; }
-.nav-util-icon { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); color: #ffd24d; transition: background 0.2s ease, transform 0.2s ease; }
+.nav-util { display: flex; align-items: center; gap: 0.65rem; width: 204px; padding: 0 1rem; color: #fff; text-decoration: none; }
+.nav-util + .nav-util { border-left: 1px dotted rgba(255, 255, 255, 0.4); }
+.nav-util-icon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.16); color: #ffd24d; transition: background 0.2s ease, transform 0.2s ease; }
 .nav-util:hover .nav-util-icon { background: rgba(255, 255, 255, 0.28); transform: translateY(-1px); }
 .nav-util-text { min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
 .nav-util-text strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.9rem; font-weight: 900; }
