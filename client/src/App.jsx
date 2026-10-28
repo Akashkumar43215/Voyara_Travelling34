@@ -83,8 +83,8 @@ function App() {
 
       <div className="app-layout">
         <AnnouncementBar />
-        <Navbar />
         <TripCartBar />
+        <Navbar />
 
         <main className="main-content">
           <ErrorBoundary>
