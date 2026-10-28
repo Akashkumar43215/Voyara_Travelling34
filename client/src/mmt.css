@@ -414,3 +414,31 @@ h1, h2, h3, .section-title, .card-title, .hero-title { font-weight: 900; letter-
   .hs-grid { grid-template-columns: 1fr; }
   .hs-tabs { width: 100%; overflow-x: auto; }
 }
+
+/* ---------- Announcement bar above the navbar ---------- */
+.announce { position: relative; z-index: 101; color: #fff; background: linear-gradient(93deg, #061a3d 0%, #0a2a5e 35%, #0f55c8 100%); overflow: hidden; }
+.announce::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.12) 50%, transparent 65%); transform: translateX(-100%); animation: announce-shine 7s ease-in-out infinite; pointer-events: none; }
+@keyframes announce-shine { 0%, 60% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+.announce-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 0.7rem; max-width: 1480px; margin: 0 auto; padding: 0 1rem; height: 40px; }
+.announce-icon { flex: none; color: #ffd24d; }
+.announce-viewport { position: relative; flex: 1; min-width: 0; height: 100%; }
+.announce-viewport p { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 0.9rem; margin: 0; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.45s ease; pointer-events: none; }
+.announce-viewport p.on { opacity: 1; transform: none; pointer-events: auto; }
+.announce-viewport .short { display: none; }
+.announce-viewport span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.86rem; font-weight: 700; letter-spacing: 0.01em; }
+.announce-viewport a { flex: none; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.22rem 0.8rem; border-radius: 999px; background: #ffd24d; color: #0a2a5e; font-size: 0.78rem; font-weight: 900; text-decoration: none; transition: transform 0.15s ease, background 0.15s ease; }
+.announce-viewport a:hover { background: #fff; transform: translateX(2px); }
+.announce-close { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.14); color: #fff; cursor: pointer; transition: background 0.15s ease; }
+.announce-close:hover { background: rgba(255, 255, 255, 0.28); }
+
+@media (max-width: 640px) {
+  .announce-inner { gap: 0.5rem; padding: 0 0.7rem; }
+  .announce-viewport p { justify-content: flex-start; gap: 0.5rem; }
+  .announce-viewport .full { display: none; }
+  .announce-viewport .short { display: block; }
+  .announce-viewport span { font-size: 0.76rem; }
+  .announce-viewport a { padding: 0.2rem 0.6rem; font-size: 0.72rem; }
+  .announce-viewport a svg { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .announce::after { animation: none; display: none; } .announce-viewport p { transition: none; } }

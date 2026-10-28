@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { AlertCircle } from "lucide-react";
 
 import Navbar from "./components/Navbar";
+import AnnouncementBar from "./components/AnnouncementBar";
 import Footer from "./components/Footer";
 import RequireLogin from "./components/RequireLogin";
 import ScrollToTop from "./components/ScrollToTop";
@@ -79,6 +80,7 @@ function App() {
       <ScrollProgress />
 
       <div className="app-layout">
+        <AnnouncementBar />
         <Navbar />
 
         <main className="main-content">

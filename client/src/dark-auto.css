@@ -1433,6 +1433,9 @@
 :root[data-theme="dark"] .hs-faq p {
   color: #bcc6d8;
 }
+:root[data-theme="dark"] .announce-viewport a:hover {
+  background: #141c2e;
+}
 
 /* ---- hotels.css ---- */
 :root[data-theme="dark"] .hotels-page {
