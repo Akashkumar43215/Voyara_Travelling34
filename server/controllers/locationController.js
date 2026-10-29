@@ -4,6 +4,7 @@ const {
   searchAccommodation,
 } = require("../services/geoapifyService");
 
+const { attachStayPhotos, resolvePhoto } = require("../services/stayPhotoService");
 const { attachStockImages } = require("../services/stayImageService");
 const { ensureDefaultRooms } = require("../services/roomService");
 const { attachPlaceImages, distanceKm } = require("../services/placeImageService");
@@ -447,8 +448,8 @@ const stays = async (req, res) => {
         };
       });
 
-    // Fill in stock photos for stays that have no uploaded image
-    const withPhotos = await attachStockImages(results);
+    // Real photos of the property where one is found, stock photos for the rest
+    const withPhotos = await attachStockImages(await attachStayPhotos(results));
 
     // Real traveler reviews, where there are any, replace the generated rating
     const stayIds = withPhotos.map((s) => s.placeId).filter(Boolean);
@@ -616,7 +617,19 @@ const saveStay = async (req, res) => {
   }
 };
 
+// GET /api/location/stay-photo?ref=...&w=800  - sends the browser to Google's picture; the API key never leaves the server
+const stayPhoto = async (req, res) => {
+  const width = Math.min(1600, Math.max(200, Math.round(Number(req.query.w)) || 800));
+  const url = await resolvePhoto(String(req.query.ref || ""), width);
+
+  if (!url) return res.status(404).json({ success: false, message: "Photo not found." });
+
+  res.set("Cache-Control", "public, max-age=86400");
+  return res.redirect(302, url);
+};
+
 module.exports = {
+  stayPhoto,
   autocomplete,
   places,
   stays,

@@ -106,6 +106,29 @@ test("Reviews: helpful votes and photos", { skip }, async (t) => {
 
   const list = (token, query = "") => call("GET", `/api/reviews/place/hawa-mahal${query}`, null, token);
 
+  await t.test("trip details are kept when valid and dropped when not", async () => {
+    const path = "/api/reviews/stay/trip-details-stay";
+    const saved = await call("POST", path, {
+      rating: 4,
+      travellerType: "couple",
+      travelMonth: "2026-10",
+      roomType: "Deluxe Room",
+      categoryRatings: { location: 5, food: 9, bogus: 3 },
+    }, ann.token);
+
+    assert.equal(saved.status, 200);
+    assert.equal(saved.json.data.travellerType, "couple");
+    assert.equal(saved.json.data.travelMonth, "2026-10");
+    assert.equal(saved.json.data.roomType, "Deluxe Room");
+    assert.deepEqual(saved.json.data.categoryRatings, { location: 5 });
+
+    const bad = await call("POST", path, { rating: 4, travellerType: "pirate", travelMonth: "soon" }, ann.token);
+
+    assert.equal(bad.json.data.travellerType, "");
+    assert.equal(bad.json.data.travelMonth, "");
+    assert.deepEqual(bad.json.data.categoryRatings, {});
+  });
+
   await t.test("listing reviews never leaks who voted", async () => {
     const r = await list();
 

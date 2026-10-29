@@ -447,10 +447,10 @@ export const deleteReviewPhoto = async (reviewId, index) => {
   return response.data;
 };
 
-export const saveReview = async (itemType, itemId, { rating, comment }) => {
+export const saveReview = async (itemType, itemId, review) => {
   const response = await api.post(
     `/reviews/${itemType}/${encodeURIComponent(itemId)}`,
-    { rating, comment },
+    review,
     { headers: authHeaders() }
   );
 

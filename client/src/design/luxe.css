@@ -1,0 +1,152 @@
+/* ======================================================
+   VOYARA "Chakra & Saffron" identity. Loaded after tokens.css, replacing the
+   teal/marigold "Field guide" look. Chakra blue, saffron, India-green.
+   Remove the import in main.jsx to revert.
+   ====================================================== */
+
+:root {
+  --v-paper: #f5f7f9;
+  --v-ink: #0d2238;
+  --v-teal: #0b4f8a;        /* names kept so older rules follow: now indigo */
+  --v-teal-deep: #083a68;
+  --v-teal-soft: #dcebf8;
+  --v-marigold: #ff9933;
+  --v-indigo: #c75a0a;      /* rani pink */
+  --v-sand: #dce3ea;
+  --v-danger: #b3261e;
+  --v-ok: #138808;
+
+  --v-font-display: "Young Serif", "Noto Sans Devanagari", "Noto Sans Oriya", Georgia, serif;
+  --v-font-ui: "Hanken Grotesk", "Noto Sans Devanagari", "Noto Sans Oriya", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --v-radius-ctl: 10px;
+  --v-radius-plate: 18px;
+  --v-arch: 14px;
+  --v-shadow-float: 0 18px 40px -18px rgba(13, 34, 56, 0.45);
+  --v-line: 1px solid var(--v-sand);
+
+  --mmt-blue: #0b4f8a; --mmt-blue-dark: #083a68;
+  --mmt-gradient: linear-gradient(135deg, #0b4f8a, #083a68);
+  --mmt-orange: #ff9933; --mmt-green: #138808; --mmt-red: #b3261e;
+  --primary: #0b4f8a; --primary-dark: #083a68; --primary-light: #dcebf8;
+  --accent: #c75a0a; --accent-light: #fde8d6;
+  --secondary: #ff9933; --secondary-light: #fdf0cf;
+  --gold: #ff9933; --gold-light: #ff9933;
+  --font-sans: var(--v-font-ui); --font-serif: var(--v-font-display);
+  --page-bg: #f5f7f9; --bg-main: #f5f7f9; --bg-card: #ffffff; --bg-subtle: #e8eef4;
+  --bg-dark: #0a1c30; --ink: #0d2238; --text-main: #0d2238;
+  --text-muted: #44566a; --text-light: #6b7d90;
+  --border: #dce3ea; --border-focus: #c75a0a;
+  --hero-from: #083a68; --hero-to: #0b4f8a;
+  --radius-sm: 8px; --radius-md: 10px; --radius-lg: 18px; --radius-xl: 22px;
+  --card-radius: 18px; --card-border: rgba(13, 34, 56, 0.09);
+  --shadow-card: 0 1px 2px rgba(13, 34, 56, 0.08);
+  --shadow-card-hover: 0 18px 40px -18px rgba(13, 34, 56, 0.45);
+  --card-shadow: 0 1px 2px rgba(13, 34, 56, 0.08);
+}
+
+:root[data-theme="dark"] {
+  --v-paper: #08131f; --v-ink: #eaf2fa; --v-teal: #6db4f2; --v-teal-soft: #12304d;
+  --v-sand: #1d3a57; --v-indigo: #ffa45c;
+  --mmt-blue: #6db4f2; --mmt-blue-dark: #a4d0f8;
+  --mmt-gradient: linear-gradient(135deg, #1a6bb3, #0b4f8a);
+  --primary: #6db4f2; --primary-dark: #a4d0f8; --primary-light: #12304d;
+  --accent: #ffa45c; --accent-light: #40230c; --secondary-light: #3a2c0a;
+  --page-bg: #08131f; --bg-main: #08131f; --bg-card: #0f2336; --bg-subtle: #142c44;
+  --bg-dark: #050e17; --ink: #eaf2fa; --text-main: #eaf2fa;
+  --text-muted: #a9bdd0; --text-light: #7e94a9;
+  --border: #1d3a57; --border-focus: #ffa45c;
+  --hero-from: #050e17; --hero-to: #12304d; --card-border: rgba(255, 255, 255, 0.09);
+}
+
+body { font-family: var(--v-font-ui); background: var(--bg-main); color: var(--text-main); }
+h1, h2, h3, .section-title, .hero-title, .page-hero-title {
+  font-family: var(--v-font-display); font-weight: 400; letter-spacing: -0.01em; font-variation-settings: normal;
+}
+.hero-title, .page-hero-title { line-height: 1.08; }
+:focus-visible { outline: 3px solid var(--border-focus); outline-offset: 2px; }
+
+/* ---------- Navigation ---------- */
+.navbar-wrapper { background: color-mix(in srgb, var(--bg-main) 88%, transparent); backdrop-filter: blur(14px); border-bottom: var(--v-line); }
+.nav-brand { font-family: var(--v-font-display); font-weight: 400; font-size: 1.65rem; letter-spacing: 0; color: var(--primary); }
+.nav-brand-logo { background: var(--accent); border-radius: 8px; box-shadow: none; }
+.nav-brand-sub { color: var(--text-muted); }
+
+/* ---------- Buttons & fields ---------- */
+.btn { border-radius: var(--v-radius-ctl); font-weight: 600; }
+.btn-primary { background: var(--primary); color: #fff; box-shadow: none; }
+.btn-primary:hover { background: var(--primary-dark); transform: none; box-shadow: 0 8px 20px -10px rgba(11, 79, 138, 0.8); }
+:root[data-theme="dark"] .btn-primary { color: #08131f; }
+.btn-secondary { background: var(--secondary); color: #0d2238; box-shadow: none; }
+.btn-secondary:hover { background: #ffad55; }
+.btn-outline { border: 1.5px solid var(--primary); color: var(--primary); background: transparent; }
+.btn-outline:hover { background: var(--primary-light); }
+input, select, textarea { border-radius: var(--v-radius-ctl); }
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+
+/* ---------- Hero: indigo night with a bandhani dot field ---------- */
+.hero, .page-hero, .page-hero-card {
+  background-color: var(--hero-from);
+  background-image:
+    linear-gradient(160deg, var(--hero-from), var(--hero-to));
+  
+  color: #fff;
+}
+.hero-title, .page-hero-title { color: #fff; }
+.hero-subtitle, .page-hero-sub { color: rgba(255, 255, 255, 0.82); max-width: 60ch; }
+.hero-badge, .page-hero-badge { background: var(--secondary); color: #0d2238; border-radius: 8px; font-weight: 700; }
+.hero-stats { border-top: 1px solid rgba(255, 255, 255, 0.25); }
+
+.search-card, .stays-search-card, .hotels-bar {
+  background: var(--bg-card); border: var(--v-line); border-radius: var(--v-radius-plate); box-shadow: var(--v-shadow-float);
+}
+.search-btn { background: var(--accent); color: #fff; border-radius: var(--v-radius-ctl); }
+.search-btn:hover { background: #a84a07; }
+.region-pills button, .mmt-tab, .tab { border-radius: 8px; }
+.region-pills .active, .mmt-tab.active, .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+:root[data-theme="dark"] .region-pills .active, :root[data-theme="dark"] .mmt-tab.active, :root[data-theme="dark"] .tab.active { color: #08131f; }
+
+/* ---------- Sections ---------- */
+.section-tag { color: var(--accent); background: none; padding: 0; font-weight: 700; letter-spacing: 0; text-transform: none; }
+.section-alt { background: var(--bg-subtle); }
+.section-desc { color: var(--text-muted); max-width: 62ch; }
+
+/* ---------- Cards: arch-top image plates (the signature) ---------- */
+.card, .hotel-card, .hs-offer, .feature-box, .place-card, .hd-similar-card {
+  background: var(--bg-card); border: 1px solid var(--card-border); border-radius: var(--v-radius-plate); box-shadow: var(--shadow-card);
+}
+.card:hover, .hotel-card:hover, .hd-similar-card:hover { box-shadow: var(--shadow-card-hover); }
+.card-media, .place-image-wrapper, .hotel-card-image, .hs-dest, .mmt-dest-card {
+  border-radius: var(--v-arch); overflow: hidden; margin: 0.6rem 0.6rem 0;
+}
+.mmt-dest-card, .hs-dest { margin: 0; border-radius: var(--v-arch); }
+.card-media img, .place-image-wrapper img, .hotel-card-image img { width: 100%; height: 100%; object-fit: cover; }
+.card-badge, .card-tag, .hotel-type-tag, .tag { border-radius: 8px; }
+.card-badge { background: var(--secondary); color: #0d2238; font-weight: 700; }
+.card-price-val, .hotel-card-price, .hd-room-price, .payment-total { color: var(--primary); font-family: var(--v-font-display); font-weight: 400; }
+.hotel-stars, .place-rating { color: var(--secondary); }
+
+/* ---------- Place details ---------- */
+.place-details-hero-image, .hotel-modal-hero { border-radius: var(--v-arch); overflow: hidden; }
+.place-info-card, .place-details-sidebar, .payment-card, .payment-summary-card, .dates-form-card, .stays-selection-bar {
+  background: var(--bg-card); border: var(--v-line); border-radius: var(--v-radius-plate);
+}
+.place-details-tag, .hd-tabs button { border-radius: 8px; }
+.place-info-icon { color: var(--accent); }
+
+/* ---------- Booking forms ---------- */
+.payment-confirm-btn, .addon-continue, .continue-places-btn {
+  background: var(--accent); color: #fff; border-radius: var(--v-radius-ctl); font-weight: 700;
+}
+.payment-confirm-btn:hover, .addon-continue:hover, .continue-places-btn:hover { background: #a84a07; }
+.payment-field input, .date-field input, .dates-grid input, .dates-grid select { border: 1.5px solid var(--border); background: var(--bg-card); }
+.payment-total, .ds-room-total { border-top: 2px dashed var(--border); }
+.payment-security-note, .payment-demo-box { background: var(--primary-light); border-radius: var(--v-radius-ctl); color: var(--text-main); }
+.verified, .good { color: var(--v-ok); }
+
+/* ---------- Footer ---------- */
+.footer { background: var(--bg-dark); color: rgba(255, 255, 255, 0.78); border-top: 4px solid var(--secondary); }
+.footer a:hover { color: var(--secondary); }
+
+/* ---------- Motion ---------- */
+@media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }

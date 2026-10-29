@@ -41,6 +41,16 @@ const reviewSchema = new mongoose.Schema(
       default: "",
     },
 
+    // optional trip details the reviewer chose to share; the site only shows what people filled in
+    travellerType: { type: String, enum: ["group", "couple", "solo", "business", "family"] },
+    travelMonth: { type: String, match: /^\d{4}-(0[1-9]|1[0-2])$/ },
+    roomType: { type: String, trim: true, maxlength: 60 },
+    categoryRatings: {
+      type: Map,
+      of: { type: Number, min: 1, max: 5 },
+      default: undefined,
+    },
+
     // up to 3 photos, stored on Cloudinary
     photos: {
       type: [{ url: { type: String, required: true }, publicId: { type: String, required: true }, _id: false }],

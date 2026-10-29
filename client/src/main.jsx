@@ -23,6 +23,9 @@ import './responsive.css';
 import './animations.css';
 import './dark-auto.css';
 import './dark.css';
+import './design/tokens.css';
+import './glass.css';
+import './design/luxe.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -6,6 +6,28 @@ const { detectImageType } = require("../services/imageCheck");
 
 const ITEM_TYPES = ["place", "stay"];
 const MAX_PHOTOS = 3;
+const TRAVELLER_TYPES = ["group", "couple", "solo", "business", "family"];
+const RATING_CATEGORIES = ["location", "cleanliness", "room", "food", "hospitality", "value"];
+
+/** Optional trip details from the request body: valid values are kept, anything else is dropped. */
+const tripDetails = (body) => {
+  const set = {};
+  const unset = {};
+  const put = (key, value) => (value === undefined ? (unset[key] = "") : (set[key] = value));
+
+  put("travellerType", TRAVELLER_TYPES.includes(body.travellerType) ? body.travellerType : undefined);
+  put("travelMonth", /^\d{4}-(0[1-9]|1[0-2])$/.test(String(body.travelMonth || "")) ? body.travelMonth : undefined);
+  put("roomType", String(body.roomType || "").trim().slice(0, 60) || undefined);
+
+  const ratings = {};
+  RATING_CATEGORIES.forEach((c) => {
+    const n = Number(body.categoryRatings?.[c]);
+    if (Number.isInteger(n) && n >= 1 && n <= 5) ratings[c] = n;
+  });
+  put("categoryRatings", Object.keys(ratings).length ? ratings : undefined);
+
+  return { set, unset };
+};
 
 const cloudinaryReady = () =>
   Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
@@ -24,6 +46,10 @@ const publicReview = (review, viewerId) => ({
   userName: review.userName,
   rating: review.rating,
   comment: review.comment,
+  travellerType: review.travellerType || "",
+  travelMonth: review.travelMonth || "",
+  roomType: review.roomType || "",
+  categoryRatings: review.categoryRatings instanceof Map ? Object.fromEntries(review.categoryRatings) : review.categoryRatings || {},
   createdAt: review.createdAt,
   photos: (review.photos || []).map((p) => ({ url: p.url })),
   demo: Boolean(review.isDemo),
@@ -42,7 +68,7 @@ const getReviews = async (req, res) => {
 
     const reviews = await Review.find({ itemType, itemId })
       .sort({ createdAt: -1 })
-      .select("userName rating comment createdAt user photos helpfulBy isDemo")
+      .select("userName rating comment createdAt user photos helpfulBy isDemo travellerType travelMonth roomType categoryRatings")
       .lean();
 
     const count = reviews.length;
@@ -85,9 +111,11 @@ const saveReview = async (req, res) => {
       return res.status(401).json({ success: false, message: "User not found." });
     }
 
+    const { set, unset } = tripDetails(req.body);
+
     const review = await Review.findOneAndUpdate(
       { user: user._id, itemType, itemId },
-      { $set: { userName: user.name, rating, comment } },
+      { $set: { userName: user.name, rating, comment, ...set }, ...(Object.keys(unset).length && { $unset: unset }) },
       { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true },
     );
 
@@ -253,4 +281,4 @@ const deleteReview = async (req, res) => {
   }
 };
 
-module.exports = { getReviews, saveReview, deleteReview, toggleHelpful, addPhotos, deletePhoto, MAX_PHOTOS };
+module.exports = { TRAVELLER_TYPES, RATING_CATEGORIES, getReviews, saveReview, deleteReview, toggleHelpful, addPhotos, deletePhoto, MAX_PHOTOS };

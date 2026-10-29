@@ -1,0 +1,72 @@
+/* ======================================================
+   Glass surfaces: home hero (tabs, search card, badge) and the navbar.
+   Loaded last. `:root[data-theme]` raises specificity above the generated dark-mode rules,
+   so the hero looks the same in light and dark (white glass over a darkened photo).
+   ====================================================== */
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-bg-strong: rgba(255, 255, 255, 0.26);
+  --glass-border: rgba(255, 255, 255, 0.34);
+  --glass-blur: blur(18px) saturate(1.4);
+  --glass-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+:root[data-theme] .hero-photo .hero-badge,
+:root[data-theme] .mmt-tabs,
+:root[data-theme] .hero-photo .search-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  color: #fff;
+}
+:root[data-theme] .hero-photo .search-card { border-radius: var(--v-radius-plate); }
+
+/* tabs */
+:root[data-theme] .mmt-tab { color: rgba(255, 255, 255, 0.9); }
+:root[data-theme] .mmt-tab:hover,
+:root[data-theme] .mmt-tab.active { background: var(--glass-bg-strong); color: #fff; }
+:root[data-theme] .mmt-tab.active::after { background: var(--v-marigold); }
+
+/* fields */
+:root[data-theme] .hero-photo .search-field {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--glass-border);
+}
+:root[data-theme] .hero-photo .search-field:hover,
+:root[data-theme] .hero-photo .search-field:focus-within { background: var(--glass-bg-strong); border-color: #fff; }
+:root[data-theme] .hero-photo .search-field label { color: rgba(255, 255, 255, 0.78); }
+:root[data-theme] .hero-photo .search-field input,
+:root[data-theme] .hero-photo .search-field select { color: #fff; }
+:root[data-theme] .hero-photo .search-field input::placeholder { color: rgba(255, 255, 255, 0.65); }
+:root[data-theme] .hero-photo .search-field svg { color: rgba(255, 255, 255, 0.85); }
+:root[data-theme] .hero-photo .search-field select option { color: #14201f; background: #fff; }
+:root[data-theme] .hero-photo input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+/* the one solid thing on the glass: the search button */
+:root[data-theme] .hero-photo .search-btn {
+  background: var(--v-marigold) !important;
+  color: var(--v-ink);
+  box-shadow: 0 8px 22px -8px rgba(232, 163, 23, 0.8);
+}
+
+/* navbar: frosted instead of solid white (transparent over the hero, as before) */
+:root[data-theme] .navbar-wrapper:not(.on-hero) {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+:root[data-theme="dark"] .navbar-wrapper:not(.on-hero) {
+  background: rgba(18, 31, 30, 0.7);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* browsers without backdrop-filter get a more opaque, still readable surface */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-bg: rgba(10, 40, 38, 0.72); --glass-bg-strong: rgba(10, 40, 38, 0.88); }
+  :root[data-theme] .navbar-wrapper:not(.on-hero) { background: #fff; }
+  :root[data-theme="dark"] .navbar-wrapper:not(.on-hero) { background: #121f1e; }
+}

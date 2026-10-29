@@ -859,19 +859,21 @@ const Stays = () => {
                 return (
                   <article key={stay.placeId} className={`hotel-card ${isSelected ? "selected" : ""}`}>
                     <div className="hotel-card-image" onClick={() => openStay(stay)}>
-                      {stay.image ? (
+                      {/* always drawn: shows through when there is no photo or the photo fails to load */}
+                      <div className="hotel-card-placeholder">
+                        <Hotel size={40} />
+                        <small>{tx("Photo not available")}</small>
+                      </div>
+                      {stay.image && (
                         <img
                           src={stay.image}
                           alt={stay.name}
                           loading="lazy"
+                          referrerPolicy="no-referrer"
                           onError={(e) => {
                             e.currentTarget.style.display = "none";
                           }}
                         />
-                      ) : (
-                        <div className="hotel-card-placeholder">
-                          <Hotel size={40} />
-                        </div>
                       )}
 
                       <span className="hotel-type-tag">{stay.stayTypeLabel}</span>

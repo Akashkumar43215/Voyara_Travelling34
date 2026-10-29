@@ -19,6 +19,11 @@ const RATING_LABELS = { 5: "Excellent", 4: "Very Good", 3: "Average", 2: "Poor",
 // Same bands the hotel list uses for its overall label
 const overallLabel = (average) => (average >= 4.5 ? "Excellent" : average >= 4 ? "Very Good" : average >= 3.5 ? "Good" : "Average");
 
+const TRAVELLER_TYPES = [["group", "Group"], ["couple", "Couple"], ["solo", "Solo"], ["business", "Business"], ["family", "Family"]];
+const CATEGORIES = [["location", "Location"], ["cleanliness", "Cleanliness"], ["room", "Room"], ["food", "Food"], ["hospitality", "Hospitality"], ["value", "Value for money"]];
+
+const monthLabel = (ym) => new Date(`${ym}-01T00:00:00`).toLocaleDateString(dateLocale(), { month: "short", year: "numeric" });
+
 const MAX_PHOTOS = 3;
 const MAX_PHOTO_MB = 3;
 const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -55,6 +60,12 @@ const ReviewsSection = ({ itemType, itemId }) => {
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("new");
   const [onlyPhotos, setOnlyPhotos] = useState(false);
+  const [traveller, setTraveller] = useState("all");
+
+  const [tType, setTType] = useState("");
+  const [tMonth, setTMonth] = useState("");
+  const [tRoom, setTRoom] = useState("");
+  const [tCats, setTCats] = useState({});
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -91,19 +102,35 @@ const ReviewsSection = ({ itemType, itemId }) => {
   }, [viewing]);
 
   // Real numbers from the loaded reviews: how many gave each star, and the latest ten ratings
+  const typeCounts = useMemo(() => {
+    const counts = {};
+    reviews.forEach((r) => r.travellerType && (counts[r.travellerType] = (counts[r.travellerType] || 0) + 1));
+    return counts;
+  }, [reviews]);
+
+  // everything below the tabs (score, bars, categories, list) follows the chosen traveller type
+  const pool = useMemo(() => (traveller === "all" ? reviews : reviews.filter((r) => r.travellerType === traveller)), [reviews, traveller]);
+  const poolAverage = pool.length ? Math.round((pool.reduce((sum, r) => sum + r.rating, 0) / pool.length) * 10) / 10 : 0;
+
   const stats = useMemo(() => {
     const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-    reviews.forEach((r) => {
+    pool.forEach((r) => {
       counts[r.rating] += 1;
     });
 
-    const latest = [...reviews].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10);
+    const latest = [...pool].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 10);
 
-    return { counts, latest };
-  }, [reviews]);
+    // average per category, only from reviewers who rated it
+    const categories = CATEGORIES.map(([key, label]) => {
+      const given = pool.map((r) => r.categoryRatings?.[key]).filter(Boolean);
+      return { key, label, count: given.length, average: given.length ? given.reduce((a, b) => a + b, 0) / given.length : 0 };
+    }).filter((c) => c.count > 0);
 
-  const shownReviews = onlyPhotos ? reviews.filter((r) => r.photos?.length > 0) : reviews;
+    return { counts, latest, categories };
+  }, [pool]);
+
+  const shownReviews = onlyPhotos ? pool.filter((r) => r.photos?.length > 0) : pool;
 
   const myReview = reviews.find((r) => String(r.user) === String(user?._id || user?.id));
 
@@ -111,6 +138,10 @@ const ReviewsSection = ({ itemType, itemId }) => {
     if (myReview) {
       setRating(myReview.rating);
       setComment(myReview.comment || "");
+      setTType(myReview.travellerType || "");
+      setTMonth(myReview.travelMonth || "");
+      setTRoom(myReview.roomType || "");
+      setTCats(myReview.categoryRatings || {});
     }
   }, [myReview?._id, myReview?.rating, myReview?.comment]);
 
@@ -126,7 +157,7 @@ const ReviewsSection = ({ itemType, itemId }) => {
     setSubmitting(true);
 
     try {
-      await saveReview(itemType, itemId, { rating, comment });
+      await saveReview(itemType, itemId, { rating, comment, travellerType: tType, travelMonth: tMonth, roomType: tRoom, categoryRatings: tCats });
       setMessage(tx("Thanks! Your review has been saved. You can now add photos."));
       await load();
     } catch (error) {
@@ -141,6 +172,10 @@ const ReviewsSection = ({ itemType, itemId }) => {
       await deleteReview(reviewId);
       setRating(0);
       setComment("");
+      setTType("");
+      setTMonth("");
+      setTRoom("");
+      setTCats({});
       setMessage("");
       await load();
     } catch (error) {
@@ -224,19 +259,32 @@ const ReviewsSection = ({ itemType, itemId }) => {
         )}
       </h2>
 
-      {reviews.length > 0 && (
+      {Object.keys(typeCounts).length > 0 && (
+        <div className="rv-tabs" role="tablist" aria-label={tx("Reviews by traveller type")}>
+          <button type="button" role="tab" aria-selected={traveller === "all"} className={traveller === "all" ? "active" : ""} onClick={() => setTraveller("all")}>
+            {tx("Everyone")}
+          </button>
+          {TRAVELLER_TYPES.filter(([key]) => typeCounts[key]).map(([key, label]) => (
+            <button key={key} type="button" role="tab" aria-selected={traveller === key} className={traveller === key ? "active" : ""} onClick={() => setTraveller(key)}>
+              {tx(label)} <small>({typeCounts[key]})</small>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {pool.length > 0 && (
         <div className="rv-summary">
           <div className="rv-score-block">
-            <span className="rv-score big">{Number(average).toFixed(1)}</span>
+            <span className="rv-score big">{Number(poolAverage).toFixed(1)}</span>
             <div>
-              <strong>{overallLabel(average)}</strong>
-              <small>{reviews.length} {reviews.length === 1 ? "Rating" : "Ratings"}</small>
+              <strong>{overallLabel(poolAverage)}</strong>
+              <small>{pool.length} {pool.length === 1 ? "Rating" : "Ratings"}</small>
             </div>
           </div>
 
           <ul className="rv-bars">
             {[5, 4, 3, 2, 1].map((star) => {
-              const percent = Math.round((stats.counts[star] / reviews.length) * 100);
+              const percent = Math.round((stats.counts[star] / pool.length) * 100);
 
               return (
                 <li key={star}>
@@ -255,6 +303,20 @@ const ReviewsSection = ({ itemType, itemId }) => {
                 <span key={r._id} className={`rv-chip r${r.rating}`} title={RATING_LABELS[r.rating]}>{r.rating}</span>
               ))}
             </div>
+
+            {stats.categories.length > 0 && (
+              <>
+                <h3 className="rv-cat-title">{tx("Rating categories")}</h3>
+                <ul className="rv-cats">
+                  {stats.categories.map((c) => (
+                    <li key={c.key}>
+                      <span>{tx(c.label)}</span>
+                      <b className="rv-score">{c.average.toFixed(1)}</b>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -272,6 +334,41 @@ const ReviewsSection = ({ itemType, itemId }) => {
             rows={3}
             placeholder={t("reviews.placeholder")}
           />
+
+          <fieldset className="rv-trip">
+            <legend>{tx("About your trip (optional)")}</legend>
+
+            <label>
+              {tx("Travelled as")}
+              <select value={tType} onChange={(e) => setTType(e.target.value)}>
+                <option value="">{tx("Not shared")}</option>
+                {TRAVELLER_TYPES.map(([key, label]) => <option key={key} value={key}>{tx(label)}</option>)}
+              </select>
+            </label>
+
+            <label>
+              {tx("Travel month")}
+              <input type="month" value={tMonth} max={new Date().toISOString().slice(0, 7)} onChange={(e) => setTMonth(e.target.value)} />
+            </label>
+
+            {itemType === "stay" && (
+              <label>
+                {tx("Room you stayed in")}
+                <input type="text" value={tRoom} maxLength={60} onChange={(e) => setTRoom(e.target.value)} />
+              </label>
+            )}
+
+            {itemType === "stay" &&
+              CATEGORIES.map(([key, label]) => (
+                <label key={key}>
+                  {tx(label)}
+                  <select value={tCats[key] || ""} onChange={(e) => setTCats((c) => ({ ...c, [key]: Number(e.target.value) || undefined }))}>
+                    <option value="">{tx("Not rated")}</option>
+                    {[5, 4, 3, 2, 1].map((n) => <option key={n} value={n}>{n}</option>)}
+                  </select>
+                </label>
+              ))}
+          </fieldset>
 
           <div className="review-form-actions">
             <button type="submit" className="btn btn-primary" disabled={submitting}>
@@ -342,7 +439,11 @@ const ReviewsSection = ({ itemType, itemId }) => {
                   <span className={`rv-score r${review.rating}`}>{Number(review.rating).toFixed(1)}</span>
                   <div className="rv-who">
                     <strong>{RATING_LABELS[review.rating]}</strong>
-                    <span>{review.userName}{review.demo && <em className="rv-demo">Sample</em>}</span>
+                    <span>
+                      {review.userName}
+                      {review.travellerType && <> • {tx(TRAVELLER_TYPES.find(([k]) => k === review.travellerType)?.[1] || "")}</>}
+                      {review.demo && <em className="rv-demo">Sample</em>}
+                    </span>
                   </div>
                   <time dateTime={review.createdAt}>
                     Reviewed {new Date(review.createdAt).toLocaleDateString(dateLocale(), {
@@ -363,7 +464,14 @@ const ReviewsSection = ({ itemType, itemId }) => {
                   )}
                 </div>
 
-                {review.comment && <p>{review.comment}</p>}
+                {review.comment ? <p>{review.comment}</p> : <p className="rv-nocomment">{tx("This review does not contain any comments")}</p>}
+
+                {(review.travelMonth || review.roomType) && (
+                  <dl className="rv-meta">
+                    {review.travelMonth && <div><dt>{tx("Travel month")}:</dt> <dd>{monthLabel(review.travelMonth)}</dd></div>}
+                    {review.roomType && <div><dt>{tx("Room")}:</dt> <dd>{review.roomType}</dd></div>}
+                  </dl>
+                )}
 
                 {review.photos?.length > 0 && (
                   <div className="review-photo-row">

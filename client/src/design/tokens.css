@@ -1,0 +1,139 @@
+/* ======================================================
+   VOYARA design tokens: "Field guide to India".
+   Loaded last. Re-points the legacy --mmt-* / --primary / --bg-* names so older
+   stylesheets pick up the new palette, then adds the new --v-* tokens for new code.
+   ====================================================== */
+
+:root {
+  --v-paper: #f7f5f0;
+  --v-ink: #14201f;
+  --v-teal: #0e4d4b;
+  --v-teal-deep: #0a3836;
+  --v-teal-soft: #dcebe9;
+  --v-marigold: #e8a317;
+  --v-indigo: #2b3a8c;
+  --v-sand: #e6e0d3;
+  --v-danger: #b3261e;
+  --v-ok: #1f7a46;
+
+  --v-font-display: "Fraunces", "Noto Sans Devanagari", "Noto Sans Oriya", Georgia, serif;
+  --v-font-ui: "Instrument Sans", "Noto Sans Devanagari", "Noto Sans Oriya", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --v-space-1: 0.25rem; --v-space-2: 0.5rem; --v-space-3: 0.75rem; --v-space-4: 1rem;
+  --v-space-5: 1.5rem; --v-space-6: 2rem; --v-space-7: 3rem; --v-space-8: 4.5rem;
+
+  --v-radius-ctl: 4px;   /* buttons, inputs, chips */
+  --v-radius-plate: 12px; /* image plates and panels */
+  --v-shadow-float: 0 10px 30px -12px rgba(20, 32, 31, 0.35);
+  --v-line: 1px solid var(--v-sand);
+
+  /* legacy names, re-pointed */
+  --mmt-blue: #0e4d4b;
+  --mmt-blue-dark: #0a3836;
+  --mmt-gradient: linear-gradient(0deg, #0e4d4b, #0e4d4b);
+  --mmt-orange: #e8a317;
+  --mmt-green: #1f7a46;
+  --mmt-red: #b3261e;
+  --primary: #0e4d4b;
+  --primary-dark: #0a3836;
+  --primary-light: #dcebe9;
+  --accent: #2b3a8c;
+  --accent-light: #e4e7f5;
+  --secondary: #e8a317;
+  --secondary-light: #fbefd0;
+  --gold: #e8a317;
+  --gold-light: #e8a317;
+  --font-sans: var(--v-font-ui);
+  --font-serif: var(--v-font-display);
+  --page-bg: #f7f5f0;
+  --bg-main: #f7f5f0;
+  --bg-card: #ffffff;
+  --bg-subtle: #efebe2;
+  --bg-dark: #0a1d1c;
+  --ink: #14201f;
+  --text-main: #14201f;
+  --text-muted: #46524f;
+  --text-light: #6d7773;
+  --border: #e6e0d3;
+  --border-focus: #2b3a8c;
+  --hero-from: #0a3836;
+  --hero-to: #0e4d4b;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 12px;
+  --radius-xl: 12px;
+  --card-radius: 12px;
+  --card-border: rgba(20, 32, 31, 0.08);
+  --shadow-card: 0 1px 2px rgba(20, 32, 31, 0.08);
+  --shadow-card-hover: 0 10px 30px -12px rgba(20, 32, 31, 0.35);
+  --card-shadow: 0 1px 2px rgba(20, 32, 31, 0.08);
+}
+
+:root[data-theme="dark"] {
+  --v-paper: #0b1514;
+  --v-ink: #eef1ee;
+  --v-teal: #5fb3ad;
+  --v-teal-soft: #14302e;
+  --v-sand: #243633;
+  --v-indigo: #9aa8f0;
+
+  --mmt-blue: #5fb3ad;
+  --mmt-blue-dark: #8fd0ca;
+  --mmt-gradient: linear-gradient(0deg, #1d6b68, #1d6b68);
+  --primary: #5fb3ad;
+  --primary-dark: #8fd0ca;
+  --primary-light: #14302e;
+  --accent: #9aa8f0;
+  --accent-light: #1b2147;
+  --secondary-light: #3a2a0c;
+  --page-bg: #0b1514;
+  --bg-main: #0b1514;
+  --bg-card: #121f1e;
+  --bg-subtle: #182827;
+  --bg-dark: #070f0e;
+  --ink: #eef1ee;
+  --text-main: #eef1ee;
+  --text-muted: #adbab6;
+  --text-light: #7f8f8b;
+  --border: #243633;
+  --border-focus: #9aa8f0;
+  --hero-from: #06201f;
+  --hero-to: #0c3a38;
+  --card-border: rgba(255, 255, 255, 0.08);
+}
+
+body { font-family: var(--v-font-ui); }
+h1, h2, h3, .section-title, .hero-title, .page-hero-title {
+  font-family: var(--v-font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 96;
+}
+
+:focus-visible { outline: 3px solid var(--border-focus); outline-offset: 2px; }
+
+/* ---------- Shared states: skeleton, empty, error ---------- */
+.v-skel {
+  display: block; border-radius: var(--v-radius-ctl);
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--v-sand) 50%, var(--bg-subtle) 75%);
+  background-size: 200% 100%; animation: v-skel 1.4s ease-in-out infinite;
+}
+.v-skel.plate { border-radius: var(--v-radius-plate); }
+@keyframes v-skel { to { background-position: -200% 0; } }
+
+.v-state {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--v-space-3);
+  max-width: 34rem; margin: var(--v-space-7) auto; padding: var(--v-space-5);
+  background: var(--bg-card); border: var(--v-line); border-radius: var(--v-radius-plate);
+  color: var(--text-main);
+}
+.v-state h3 { margin: 0; font-size: 1.35rem; }
+.v-state p { margin: 0; color: var(--text-muted); line-height: 1.55; }
+.v-state svg { color: var(--v-teal); }
+.v-state.is-error { border-color: var(--v-danger); }
+.v-state.is-error svg { color: var(--v-danger); }
+.v-state-actions { display: flex; gap: var(--v-space-3); flex-wrap: wrap; margin-top: var(--v-space-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .v-skel { animation: none; }
+}

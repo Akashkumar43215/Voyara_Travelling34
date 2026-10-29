@@ -1,13 +1,12 @@
 const axios = require("axios");
 
 /**
- * Stock photos for stays that have no uploaded image yet.
- *
- * Geoapify does not return hotel photos, so without this every unsaved stay
- * renders the same placeholder icon. We fetch one pool of photos per stay
- * type from Pexels (one API call per type, cached) and pick from the pool
- * using a hash of the stay id, so each stay keeps the same photo between
- * searches while neighbouring stays get different ones.
+ * Stock photos for stays that still have no picture after the real-photo lookup
+ * (see stayPhotoService.js). Geoapify does not return hotel photos, so without this
+ * those stays show an empty tile. We fetch one pool of photos per stay type from
+ * Pexels (one API call per type, cached) and pick from the pool using a hash of the
+ * stay id, so each stay keeps the same photo between searches while neighbouring
+ * stays get different ones.
  */
 
 const PEXELS_API_URL = "https://api.pexels.com/v1/search";
@@ -107,7 +106,7 @@ const hashString = (value) => {
 
 /**
  * Returns the stays with a stock `image` filled in wherever one is missing.
- * Stays that already have an image (e.g. Cloudinary uploads) are untouched.
+ * Stays that already have an image (uploaded or found by the real-photo lookup) are untouched.
  * Within one result set, photos are not repeated until the pool is used up.
  */
 const attachStockImages = async (stays) => {
