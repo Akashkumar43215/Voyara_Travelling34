@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { ErrorState } from "../components/StateMessage";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -242,6 +243,8 @@ const Stays = () => {
    * FETCH REAL ACCOMMODATIONS
    */
 
+  const [retryTick, setRetryTick] = useState(0);
+
   useEffect(() => {
     if (!selectedLocation) {
       setLoading(false);
@@ -315,7 +318,7 @@ const Stays = () => {
     };
 
     fetchStays();
-  }, [selectedLocation]);
+  }, [selectedLocation, retryTick]);
 
   /*
    * FILTER + SORT
@@ -827,9 +830,12 @@ const Stays = () => {
           </div>
 
           {error && (
-            <div className="hotels-error">
-              <strong>{error}</strong>
-            </div>
+            <ErrorState
+              title={tx("Something went wrong")}
+              text={error}
+              onRetry={() => setRetryTick((n) => n + 1)}
+              retryLabel={tx("Try again")}
+            />
           )}
 
           {loading && (

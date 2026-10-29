@@ -4,6 +4,8 @@ import { Heart, Hotel, MapPin } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 import PageHero from "../components/PageHero";
+import Skeleton from "../components/Skeleton";
+import { ErrorState } from "../components/StateMessage";
 import { getFavorites, toggleFavorite } from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -63,10 +65,16 @@ const Favorites = () => {
 
       <div className="container favorites-body">
 
-        {error && <p style={{ color: "#ef4444" }}>{error}</p>}
+        {error && (
+          <ErrorState title={tx("Something went wrong")} text={error} onRetry={() => window.location.reload()} retryLabel={tx("Try again")} />
+        )}
 
         {loading ? (
-          <p>{tx("Loading your favorites...")}</p>
+          <div className="favorites-grid" role="status" aria-label={tx("Loading your favorites...")}>
+            {[1, 2, 3].map((n) => (
+              <Skeleton key={n} height="15rem" plate />
+            ))}
+          </div>
         ) : favorites.length === 0 ? (
           <div className="favorites-empty">
             <Heart size={40} />

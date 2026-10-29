@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
-import { AlertCircle } from "lucide-react";
+import Skeleton from "./components/Skeleton";
+import { EmptyState } from "./components/StateMessage";
 
 import Navbar from "./components/Navbar";
 import TripCartBar from "./components/TripCartBar";
@@ -45,27 +46,22 @@ const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 
 const PageLoader = () => (
   <div className="page-loader" role="status" aria-live="polite">
-    <div className="page-loader-spinner" />
+    <div style={{ display: "grid", gap: "0.75rem", width: "min(560px, 90vw)" }}>
+      <Skeleton height="2.25rem" width="55%" />
+      <Skeleton height="1rem" />
+      <Skeleton height="1rem" width="85%" />
+      <Skeleton height="9rem" plate />
+    </div>
     <span>{tg("Loading...")}</span>
   </div>
 );
 
 const NotFound = () => (
-  <div className="section" style={{ minHeight: "60vh", display: "flex", alignItems: "center" }}>
-    <div className="container" style={{ textAlign: "center", maxWidth: "500px" }}>
-      <AlertCircle size={48} color="#ef4444" style={{ margin: "0 auto 1rem" }} />
-
-      <h2 style={{ marginBottom: "0.5rem" }}>{tg("Page Not Found")}</h2>
-
-      <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem" }}>
-        {tg("The page you are looking for does not exist in VOYARA.")}
-      </p>
-
-      <Link to="/" className="btn btn-primary">
-        {tg("Return to Home")}
-      </Link>
-    </div>
-  </div>
+  <EmptyState
+    title={tg("Page Not Found")}
+    text={tg("The page you are looking for does not exist in VOYARA.")}
+    action={{ label: tg("Return to Home"), to: "/" }}
+  />
 );
 
 const guarded = (page) => <RequireLogin>{page}</RequireLogin>;

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { ErrorState } from "../components/StateMessage";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -330,9 +331,7 @@ const MyTrips = () => {
         ================================================== */}
 
         {error && (
-          <div className="trips-error">
-            {error}
-          </div>
+          <ErrorState title={tx("Something went wrong")} text={error} onRetry={() => window.location.reload()} retryLabel={tx("Try again")} />
         )}
 
         {/* ==================================================
